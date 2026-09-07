@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Al Fima Agency Ltd — Your Gateway to Global Career Opportunities</title>
+<meta name="description" content="Al Fima Agency Ltd is a licensed international recruitment and human resource company based in Nairobi, Kenya, connecting Kenyan talent to verified careers abroad." />
+
+<!-- Favicons -->
+<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Google Font: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          charcoal: '#111827',
+          charcoal2: '#1a2333',
+          accent: '#F97316',
+          accentDark: '#c2570b',
+        },
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Helvetica', 'Arial', 'sans-serif'],
+        },
+        boxShadow: {
+          card: '0 10px 30px -12px rgba(17,24,39,0.25)',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+
+  /* Page transition */
+  .page-section { display: none; opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; }
+  .page-section.active { display: block; }
+  .page-section.show { opacity: 1; transform: translateY(0); }
+
+  /* Scroll fade-in */
+  .fade-up { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .fade-up.in-view { opacity: 1; transform: translateY(0); }
+
+  /* Nav link underline animation */
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: '';
+    position: absolute; left: 0; bottom: -6px;
+    width: 0; height: 2px; background: #F97316;
+    transition: width .25s ease;
+  }
+  .nav-link.active-link::after, .nav-link:hover::after { width: 100%; }
+  .nav-link.active-link { color: #F97316; }
+
+  /* Card hover lift */
+  .lift-card { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+  .lift-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -14px rgba(17,24,39,0.35); }
+
+  /* Accordion */
+  .faq-panel { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+
+  /* Modal */
+  .modal-backdrop { transition: opacity .25s ease; }
+  .modal-panel { transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .3s ease; }
+
+  /* Scrollbar niceness */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #f3f4f6; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 8px; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up, .page-section, .lift-card { transition: none !important; }
+  }
+
+  .btn-accent { background: #F97316; color: #111827; }
+  .btn-accent:hover { background: #ea580c; }
+
+  .visually-hidden { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 2px solid #F97316; outline-offset: 2px;
+  }
+</style>
+</head>
+
+<body class="bg-white text-charcoal antialiased">
+
+<!-- ============ NAVBAR ============ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-charcoal/95 backdrop-blur border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <button data-nav="home" class="nav-btn flex items-center">
+        <img src="assets/images/logo-white.png" alt="Al Fima Agency" class="h-9 md:h-11 w-auto">
+      </button>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+        <button data-nav="home" class="nav-btn nav-link">Home</button>
+        <button data-nav="about" class="nav-btn nav-link">About Us</button>
+        <button data-nav="services" class="nav-btn nav-link">Services</button>
+        <button data-nav="jobs" class="nav-btn nav-link">Job Board</button>
+        <button data-nav="faq" class="nav-btn nav-link">FAQ</button>
+      </nav>
+
+      <div class="hidden md:block">
+        <button data-nav="contact" class="nav-btn inline-flex items-center gap-2 btn-accent font-semibold text-sm px-5 py-2.5 rounded-md transition-colors">
+          Contact Us
+        </button>
+      </div>
+
+      <!-- Mobile menu toggle -->
+      <button id="mobileMenuBtn" class="md:hidden text-white p-2" aria-label="Toggle menu" aria-expanded="false">
+        <svg id="iconMenu" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+        <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="md:hidden hidden border-t border-white/10 bg-charcoal">
+    <div class="px-5 py-4 flex flex-col gap-1 text-gray-200 font-medium">
+      <button data-nav="home" class="nav-btn text-left py-2.5 border-b border-white/5">Home</button>
+      <button data-nav="about" class="nav-btn text-left py-2.5 border-b border-white/5">About Us</button>
+      <button data-nav="services" class="nav-btn text-left py-2.5 border-b border-white/5">Services</button>
+      <button data-nav="jobs" class="nav-btn text-left py-2.5 border-b border-white/5">Job Board</button>
+      <button data-nav="faq" class="nav-btn text-left py-2.5 border-b border-white/5">FAQ</button>
+      <button data-nav="contact" class="nav-btn text-left py-3 mt-1 btn-accent rounded-md px-3 font-semibold">Contact Us</button>
+    </div>
+  </div>
+</header>
+
+<main class="pt-16 md:pt-20">
+
+<!-- ============================================================ -->
+<!-- HOME PAGE -->
+<!-- ============================================================ -->
+<section id="page-home" class="page-section">
+
+  <!-- HERO -->
+  <div class="relative min-h-[92vh] flex items-center overflow-hidden">
+    <div class="absolute inset-0">
+      <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1920&q=80" alt="Airplane wing above the clouds, symbolizing international travel" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-gradient-to-r from-charcoal via-charcoal/85 to-charcoal/40"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-5 md:px-8 w-full py-24">
+      <div class="max-w-2xl">
+        <span class="fade-up inline-block text-accent font-semibold text-sm tracking-wide mb-5 border border-accent/40 rounded-full px-4 py-1.5">Licensed International Recruitment Agency · Nairobi, Kenya</span>
+        <h1 class="fade-up text-white text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-6">
+          Your Gateway to Global Career Opportunities
+        </h1>
+        <p class="fade-up text-gray-300 text-lg leading-relaxed mb-9 max-w-xl">
+          Al Fima Agency connects skilled and dedicated Kenyan talent with safe, legal, and verified employment pathways across the world — from healthcare wards in Germany to hospitality floors in Canada.
+        </p>
+        <div class="fade-up flex flex-wrap gap-4">
+          <button data-nav="jobs" class="nav-btn btn-accent font-semibold px-7 py-3.5 rounded-md transition-colors">View Openings</button>
+          <button data-nav="contact" class="nav-btn font-semibold px-7 py-3.5 rounded-md border border-white/30 text-white hover:bg-white hover:text-charcoal transition-colors">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS RIBBON -->
+  <div class="bg-charcoal border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="fade-up">
+        <p class="text-accent text-3xl md:text-4xl font-extrabold">5,000+</p>
+        <p class="text-gray-400 text-sm mt-1">Successful Placements</p>
+      </div>
+      <div class="fade-up">
+        <p class="text-accent text-3xl md:text-4xl font-extrabold">5+</p>
+        <p class="text-gray-400 text-sm mt-1">Destination Countries</p>
+      </div>
+      <div class="fade-up">
+        <p class="text-accent text-3xl md:text-4xl font-extrabold">100%</p>
+        <p class="text-gray-400 text-sm mt-1">Licensed &amp; Compliant</p>
+      </div>
+      <div class="fade-up">
+        <p class="text-accent text-3xl md:text-4xl font-extrabold">10+ yrs</p>
+        <p class="text-gray-400 text-sm mt-1">Industry Experience</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE PILLARS -->
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-24">
+    <div class="max-w-2xl mb-14 fade-up">
+      <p class="text-accent font-semibold text-sm mb-3">What we place candidates in</p>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-charcoal mb-4">Three core pathways to a global career</h2>
+      <p class="text-gray-600 leading-relaxed">Every candidate we place goes through the same rigorous vetting, training, and legal documentation process, regardless of industry.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="fade-up lift-card rounded-xl overflow-hidden border border-gray-100 shadow-card">
+        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=900&q=80" alt="A caregiver assisting an elderly patient" class="w-full h-52 object-cover">
+        <div class="p-7">
+          <h3 class="text-xl font-bold mb-2">Caregiving</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">Hospital support, elderly care, and healthcare assistant roles in Germany, Canada, and beyond.</p>
+          <button data-nav="services" class="nav-btn text-accent font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Learn more <span aria-hidden="true">›</span></button>
+        </div>
+      </div>
+
+      <div class="fade-up lift-card rounded-xl overflow-hidden border border-gray-100 shadow-card">
+        <img src="https://images.unsplash.com/photo-1553413077-190983b8f0f6?auto=format&fit=crop&w=900&q=80" alt="Logistics workers in a warehouse" class="w-full h-52 object-cover">
+        <div class="p-7">
+          <h3 class="text-xl font-bold mb-2">General Employment</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">Logistics, hospitality, retail, and general labour opportunities across the Gulf and beyond.</p>
+          <button data-nav="services" class="nav-btn text-accent font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Learn more <span aria-hidden="true">›</span></button>
+        </div>
+      </div>
+
+      <div class="fade-up lift-card rounded-xl overflow-hidden border border-gray-100 shadow-card">
+        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80" alt="A household management professional at work" class="w-full h-52 object-cover">
+        <div class="p-7">
+          <h3 class="text-xl font-bold mb-2">Household Management</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">Verified housemaid and domestic staff placements with vetted, respectful employers.</p>
+          <button data-nav="services" class="nav-btn text-accent font-semibold text-sm inline-flex items-center gap-1.5 hover:gap-2.5 transition-all">Learn more <span aria-hidden="true">›</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA BAND -->
+  <div class="bg-charcoal">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-16 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+      <div>
+        <h3 class="text-white text-2xl md:text-3xl font-bold mb-2">Ready to start your journey abroad?</h3>
+        <p class="text-gray-400">Browse live openings or speak to our recruitment team today.</p>
+      </div>
+      <div class="flex gap-4 flex-shrink-0">
+        <button data-nav="jobs" class="nav-btn btn-accent font-semibold px-6 py-3 rounded-md transition-colors">View Openings</button>
+        <button data-nav="contact" class="nav-btn font-semibold px-6 py-3 rounded-md border border-white/30 text-white hover:bg-white hover:text-charcoal transition-colors">Contact Us</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- ABOUT PAGE -->
+<!-- ============================================================ -->
+<section id="page-about" class="page-section">
+
+  <div class="relative bg-charcoal">
+    <div class="absolute inset-0 opacity-30">
+      <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1920&q=80" alt="World map view of city lights at night" class="w-full h-full object-cover">
+    </div>
+    <div class="relative max-w-7xl mx-auto px-5 md:px-8 py-24 text-center">
+      <p class="text-accent font-semibold text-sm mb-3 fade-up">About Al Fima Agency</p>
+      <h1 class="text-white text-3xl md:text-5xl font-extrabold max-w-3xl mx-auto leading-tight fade-up">Building safe, legal pathways for Kenyan talent since day one</h1>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-24 grid md:grid-cols-2 gap-14 items-center">
+    <div class="fade-up">
+      <p class="text-accent font-semibold text-sm mb-3">Our Mission</p>
+      <h2 class="text-3xl font-extrabold mb-5 leading-snug">Every placement is safe, legal, and verified</h2>
+      <p class="text-gray-600 leading-relaxed mb-4">Al Fima Agency Ltd is a fully licensed recruitment and human resource company based in Nairobi. We exist to connect qualified Kenyan job seekers with genuine, vetted employers abroad — never through shortcuts, and never at the expense of a candidate's safety or rights.</p>
+      <p class="text-gray-600 leading-relaxed">From the first interview to the day a candidate lands at their destination, our team manages documentation, employer verification, and pre-departure preparation so that every journey is built on a legitimate contract, not a promise.</p>
+    </div>
+    <div class="fade-up">
+      <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1000&q=80" alt="Two professionals shaking hands over a signed agreement" class="rounded-xl w-full h-96 object-cover shadow-card">
+    </div>
+  </div>
+
+  <!-- Destination Highlights -->
+  <div class="bg-gray-50 py-24">
+    <div class="max-w-7xl mx-auto px-5 md:px-8">
+      <div class="max-w-2xl mb-14 fade-up">
+        <p class="text-accent font-semibold text-sm mb-3">Destination Network</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Where our candidates work</h2>
+        <p class="text-gray-600 leading-relaxed">We maintain direct relationships with licensed employers and partner agencies across five key destinations.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div class="fade-up lift-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-card">
+          <img src="https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=500&q=80" alt="Banff National Park landscape in Canada" class="w-full h-36 object-cover">
+          <p class="text-center font-bold py-3.5">Canada</p>
+        </div>
+        <div class="fade-up lift-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-card">
+          <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=500&q=80" alt="Berlin cityscape in Germany" class="w-full h-36 object-cover">
+          <p class="text-center font-bold py-3.5">Germany</p>
+        </div>
+        <div class="fade-up lift-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-card">
+          <img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=500&q=80" alt="Sydney Opera House in Australia" class="w-full h-36 object-cover">
+          <p class="text-center font-bold py-3.5">Australia</p>
+        </div>
+        <div class="fade-up lift-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-card">
+          <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=500&q=80" alt="Dubai city skyline" class="w-full h-36 object-cover">
+          <p class="text-center font-bold py-3.5">Dubai</p>
+        </div>
+        <div class="fade-up lift-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-card">
+          <img src="https://images.unsplash.com/photo-1586724237569-f3d0c1dee8c6?auto=format&fit=crop&w=500&q=80" alt="Desert landscape representing Saudi Arabia" class="w-full h-36 object-cover">
+          <p class="text-center font-bold py-3.5">Saudi Arabia</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Al Fima Advantage -->
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-24">
+    <div class="max-w-2xl mb-14 fade-up">
+      <p class="text-accent font-semibold text-sm mb-3">The Al Fima Advantage</p>
+      <h2 class="text-3xl md:text-4xl font-extrabold mb-4">What sets our process apart</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="fade-up p-8 rounded-xl border border-gray-100 shadow-card">
+        <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Pre-Deployment Training</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Every candidate completes structured training specific to their role and destination country before departure.</p>
+      </div>
+      <div class="fade-up p-8 rounded-xl border border-gray-100 shadow-card">
+        <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Cultural Orientation</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">We prepare candidates for the language, customs, and workplace expectations of their new home before they arrive.</p>
+      </div>
+      <div class="fade-up p-8 rounded-xl border border-gray-100 shadow-card">
+        <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Legal Compliance</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">All contracts are verified against Kenyan labour export law and destination-country employment regulations.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SERVICES PAGE -->
+<!-- ============================================================ -->
+<section id="page-services" class="page-section">
+
+  <div class="bg-charcoal py-20">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
+      <p class="text-accent font-semibold text-sm mb-3 fade-up">Our Services</p>
+      <h1 class="text-white text-3xl md:text-5xl font-extrabold fade-up">Three tracks. One rigorous standard.</h1>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-20 space-y-20">
+
+    <!-- Track 1 -->
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div class="fade-up order-2 md:order-1">
+        <span class="inline-block text-xs font-bold tracking-wide text-accent bg-accent/10 rounded-full px-3 py-1 mb-4">Track 01</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-4">Caregiving &amp; Healthcare</h2>
+        <p class="text-gray-600 leading-relaxed mb-5">We place trained caregivers and healthcare support staff into hospitals, care homes, and private households across Germany and Canada. Roles include elderly care assistants, hospital support staff, and certified nursing aides.</p>
+        <ul class="space-y-2.5 text-sm text-gray-700">
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Hospital and elderly care support roles</li>
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Certification support for destination-country standards</li>
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Ongoing welfare check-ins after placement</li>
+        </ul>
+      </div>
+      <div class="fade-up order-1 md:order-2">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=80" alt="A caregiver holding the hands of an elderly person" class="rounded-xl w-full h-80 object-cover shadow-card">
+      </div>
+    </div>
+
+    <!-- Track 2 -->
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div class="fade-up">
+        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=80" alt="A hospitality worker at a hotel front desk" class="rounded-xl w-full h-80 object-cover shadow-card">
+      </div>
+      <div class="fade-up">
+        <span class="inline-block text-xs font-bold tracking-wide text-accent bg-accent/10 rounded-full px-3 py-1 mb-4">Track 02</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-4">General Employment</h2>
+        <p class="text-gray-600 leading-relaxed mb-5">Our largest category covers logistics, hospitality, and retail roles across Dubai, Saudi Arabia, and beyond — placements that reward reliability and a strong work ethic with stable income and accommodation.</p>
+        <ul class="space-y-2.5 text-sm text-gray-700">
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Warehouse, logistics, and supply chain roles</li>
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Hotel, restaurant, and hospitality positions</li>
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Retail and general labour contracts</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Track 3 -->
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div class="fade-up order-2 md:order-1">
+        <span class="inline-block text-xs font-bold tracking-wide text-accent bg-accent/10 rounded-full px-3 py-1 mb-4">Track 03</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-4">Household Management</h2>
+        <p class="text-gray-600 leading-relaxed mb-5">We carefully vet host families and employers before placing housemaids and domestic staff, ensuring fair contracts, respectful working conditions, and clear terms from day one.</p>
+        <ul class="space-y-2.5 text-sm text-gray-700">
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Verified employer background checks</li>
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Clear, written contract terms in advance</li>
+          <li class="flex items-start gap-2.5"><svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>Direct support line during the placement</li>
+        </ul>
+      </div>
+      <div class="fade-up order-1 md:order-2">
+        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80" alt="A domestic staff professional organizing a home" class="rounded-xl w-full h-80 object-cover shadow-card">
+      </div>
+    </div>
+  </div>
+
+  <!-- Training capabilities -->
+  <div class="bg-charcoal py-24">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-14 items-center">
+      <div class="fade-up">
+        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=80" alt="A group training session in progress" class="rounded-xl w-full h-96 object-cover">
+      </div>
+      <div class="fade-up">
+        <p class="text-accent font-semibold text-sm mb-3">Training Capabilities</p>
+        <h2 class="text-white text-3xl font-extrabold mb-5 leading-snug">Mandatory pre-deployment training, for every candidate</h2>
+        <p class="text-gray-400 leading-relaxed mb-6">No candidate departs without completing our pre-deployment programme, covering workplace safety, language basics, cultural orientation, and role-specific skills refreshers.</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="bg-white/5 rounded-lg p-5 border border-white/10">
+            <p class="text-white font-bold mb-1">Role-Specific Skills</p>
+            <p class="text-gray-400 text-sm">Refreshers matched to the exact job description and employer expectations.</p>
+          </div>
+          <div class="bg-white/5 rounded-lg p-5 border border-white/10">
+            <p class="text-white font-bold mb-1">Orientation Briefing</p>
+            <p class="text-gray-400 text-sm">Practical guidance on local customs, transport, and everyday life abroad.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- JOB BOARD PAGE -->
+<!-- ============================================================ -->
+<section id="page-jobs" class="page-section">
+
+  <div class="bg-charcoal py-20">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
+      <p class="text-accent font-semibold text-sm mb-3 fade-up">Job Board</p>
+      <h1 class="text-white text-3xl md:text-5xl font-extrabold mb-4 fade-up">Current openings</h1>
+      <p class="text-gray-400 max-w-xl mx-auto fade-up">Verified vacancies from our partner employers abroad. Applications are reviewed by our recruitment team within 48 hours.</p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-16">
+
+    <!-- Filters -->
+    <div id="jobFilters" class="fade-up flex flex-wrap gap-3 mb-10">
+      <button data-filter="all" class="filter-btn active-filter px-5 py-2 rounded-full text-sm font-semibold border transition-colors">All Roles</button>
+      <button data-filter="Caregiving" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border transition-colors">Caregiving</button>
+      <button data-filter="General Employment" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border transition-colors">General Employment</button>
+      <button data-filter="Household" class="filter-btn px-5 py-2 rounded-full text-sm font-semibold border transition-colors">Household</button>
+    </div>
+
+    <div id="jobGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- FAQ PAGE -->
+<!-- ============================================================ -->
+<section id="page-faq" class="page-section">
+
+  <div class="bg-charcoal py-20">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
+      <p class="text-accent font-semibold text-sm mb-3 fade-up">FAQ</p>
+      <h1 class="text-white text-3xl md:text-5xl font-extrabold fade-up">Common questions</h1>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-5 md:px-8 py-20">
+    <div id="faqList" class="space-y-4"></div>
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- CONTACT PAGE -->
+<!-- ============================================================ -->
+<section id="page-contact" class="page-section">
+
+  <div class="bg-charcoal py-20">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
+      <p class="text-accent font-semibold text-sm mb-3 fade-up">Contact Us</p>
+      <h1 class="text-white text-3xl md:text-5xl font-extrabold fade-up">Let's talk about your next step</h1>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-20 grid lg:grid-cols-2 gap-16">
+
+    <!-- Contact info -->
+    <div class="fade-up">
+      <h2 class="text-2xl font-extrabold mb-6">Reach us directly</h2>
+      <p class="text-gray-600 leading-relaxed mb-8">Our office is based in Nairobi, Kenya. For the fastest response, reach out via WhatsApp or email — our recruitment team typically replies within one business day.</p>
+
+      <div class="space-y-5 mb-10">
+        <div class="flex items-start gap-4">
+          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
+          </div>
+          <div>
+            <p class="font-bold">Phone</p>
+            <p class="text-gray-600 text-sm">+254 721 630 420 &nbsp;|&nbsp; +254 753 646 819</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2.003c-5.518 0-9.997 4.478-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.116-1.343a9.96 9.96 0 004.885 1.244h.004c5.518 0 9.997-4.478 9.997-9.997 0-2.67-1.04-5.18-2.928-7.07a9.935 9.935 0 00-7.073-2.931zm0 18.174h-.003a8.163 8.163 0 01-4.16-1.138l-.298-.177-3.037.797.811-2.96-.194-.304a8.169 8.169 0 01-1.256-4.373c0-4.514 3.674-8.187 8.19-8.187a8.14 8.14 0 015.79 2.398 8.14 8.14 0 012.397 5.792c-.002 4.515-3.676 8.188-8.19 8.188z"/></svg>
+          </div>
+          <div>
+            <p class="font-bold">WhatsApp</p>
+            <p class="text-gray-600 text-sm">0116 252 454</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+          </div>
+          <div>
+            <p class="font-bold">Email</p>
+            <p class="text-gray-600 text-sm">alfimaagencyltd@gmail.com</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+          </div>
+          <div>
+            <p class="font-bold">Location</p>
+            <p class="text-gray-600 text-sm">Nairobi, Kenya</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick action buttons -->
+      <div class="flex flex-wrap gap-4 mb-10">
+        <a href="https://wa.me/254116252454" target="_blank" rel="noopener" class="inline-flex items-center gap-2.5 bg-[#25D366] text-white font-semibold px-6 py-3 rounded-md hover:brightness-95 transition-all">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2.003c-5.518 0-9.997 4.478-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.116-1.343a9.96 9.96 0 004.885 1.244h.004c5.518 0 9.997-4.478 9.997-9.997 0-2.67-1.04-5.18-2.928-7.07a9.935 9.935 0 00-7.073-2.931zm0 18.174h-.003a8.163 8.163 0 01-4.16-1.138l-.298-.177-3.037.797.811-2.96-.194-.304a8.169 8.169 0 01-1.256-4.373c0-4.514 3.674-8.187 8.19-8.187a8.14 8.14 0 015.79 2.398 8.14 8.14 0 012.397 5.792c-.002 4.515-3.676 8.188-8.19 8.188z"/></svg>
+          WhatsApp Us
+        </a>
+        <a href="mailto:alfimaagencyltd@gmail.com" class="inline-flex items-center gap-2.5 btn-accent font-semibold px-6 py-3 rounded-md transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+          Email Us
+        </a>
+      </div>
+
+      <!-- Socials -->
+      <div>
+        <p class="font-bold mb-3 text-sm">Follow Al Fima Agency</p>
+        <div class="flex gap-3">
+          <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full bg-charcoal text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+            <svg class="w-4.5 h-4.5" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.02 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.507 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.878h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.92 8.437-9.94z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full bg-charcoal text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+            <svg class="w-4.5 h-4.5" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.256 1.216.6 1.772 1.153a4.908 4.908 0 011.153 1.772c.247.637.415 1.363.465 2.428.05 1.066.06 1.405.06 4.122s-.01 3.056-.06 4.122c-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 01-1.153 1.772 4.915 4.915 0 01-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.05-1.405.06-4.122.06s-3.056-.01-4.122-.06c-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 01-1.772-1.153 4.904 4.904 0 01-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.01 15.056 2 14.717 2 12s.01-3.056.06-4.122c.05-1.065.217-1.79.465-2.428a4.88 4.88 0 011.153-1.772A4.897 4.897 0 015.45 2.525c.637-.248 1.363-.415 2.428-.465C8.944 2.01 9.283 2 12 2zm0 5a5 5 0 100 10 5 5 0 000-10zm0 8.243A3.243 3.243 0 1112 8.757a3.243 3.243 0 010 6.486zm5.2-8.44a1.17 1.17 0 100-2.34 1.17 1.17 0 000 2.34z"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn" class="w-10 h-10 rounded-full bg-charcoal text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+            <svg class="w-4.5 h-4.5" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 110-4.124 2.062 2.062 0 010 4.124zM7.114 20.452H3.558V9h3.556v11.452z"/></svg>
+          </a>
+          <a href="https://wa.me/254116252454" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-10 h-10 rounded-full bg-charcoal text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+            <svg class="w-4.5 h-4.5" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2.003c-5.518 0-9.997 4.478-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.116-1.343a9.96 9.96 0 004.885 1.244h.004c5.518 0 9.997-4.478 9.997-9.997 0-2.67-1.04-5.18-2.928-7.07a9.935 9.935 0 00-7.073-2.931zm0 18.174h-.003a8.163 8.163 0 01-4.16-1.138l-.298-.177-3.037.797.811-2.96-.194-.304a8.169 8.169 0 01-1.256-4.373c0-4.514 3.674-8.187 8.19-8.187a8.14 8.14 0 015.79 2.398 8.14 8.14 0 012.397 5.792c-.002 4.515-3.676 8.188-8.19 8.188z"/></svg>
+          </a>
+          <a href="#" aria-label="TikTok" class="w-10 h-10 rounded-full bg-charcoal text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+            <svg class="w-4.5 h-4.5" width="16" height="16" viewBox="0 0 448 512" fill="currentColor"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact form -->
+    <div class="fade-up bg-gray-50 rounded-xl p-8 md:p-10 border border-gray-100">
+      <h2 class="text-2xl font-extrabold mb-6">Send us a message</h2>
+      <form id="contactForm" class="space-y-5">
+        <div>
+          <label for="cf-name" class="block text-sm font-semibold mb-1.5">Full Name</label>
+          <input id="cf-name" required type="text" placeholder="Jane Wanjiru" class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none">
+        </div>
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="cf-email" class="block text-sm font-semibold mb-1.5">Email Address</label>
+            <input id="cf-email" required type="email" placeholder="you@example.com" class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none">
+          </div>
+          <div>
+            <label for="cf-phone" class="block text-sm font-semibold mb-1.5">Phone Number</label>
+            <input id="cf-phone" required type="tel" placeholder="07xx xxx xxx" class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none">
+          </div>
+        </div>
+        <div>
+          <label for="cf-interest" class="block text-sm font-semibold mb-1.5">Area of Interest</label>
+          <select id="cf-interest" class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none bg-white">
+            <option>Caregiving &amp; Healthcare</option>
+            <option>General Employment</option>
+            <option>Household Management</option>
+            <option>General Inquiry</option>
+          </select>
+        </div>
+        <div>
+          <label for="cf-message" class="block text-sm font-semibold mb-1.5">Message</label>
+          <textarea id="cf-message" required rows="4" placeholder="Tell us about your background and which destination you're interested in..." class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none resize-none"></textarea>
+        </div>
+
+        <div class="dual-submit grid sm:grid-cols-2 gap-4 pt-1">
+          <button type="button" id="contactWhatsappBtn" class="inline-flex items-center justify-center gap-2.5 bg-[#25D366] text-white font-semibold py-3.5 rounded-md hover:brightness-95 transition-all">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2.003c-5.518 0-9.997 4.478-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.116-1.343a9.96 9.96 0 004.885 1.244h.004c5.518 0 9.997-4.478 9.997-9.997 0-2.67-1.04-5.18-2.928-7.07a9.935 9.935 0 00-7.073-2.931zm0 18.174h-.003a8.163 8.163 0 01-4.16-1.138l-.298-.177-3.037.797.811-2.96-.194-.304a8.169 8.169 0 01-1.256-4.373c0-4.514 3.674-8.187 8.19-8.187a8.14 8.14 0 015.79 2.398 8.14 8.14 0 012.397 5.792c-.002 4.515-3.676 8.188-8.19 8.188z"/></svg>
+            Send via WhatsApp
+          </button>
+          <button type="button" id="contactEmailBtn" class="inline-flex items-center justify-center gap-2.5 btn-accent font-semibold py-3.5 rounded-md transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+            Send via Email
+          </button>
+        </div>
+        <p id="contactError" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-4 py-3">Something went wrong sending your message. Please try WhatsApp instead, or email us directly.</p>
+        <p id="contactSuccess" class="hidden text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-4 py-3">Thank you — your message has been sent. We'll be in touch shortly.</p>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-charcoal border-t border-white/10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <div>
+      <button data-nav="home" class="nav-btn flex items-center mb-4">
+        <img src="assets/images/logo-white.png" alt="Al Fima Agency" class="h-10 w-auto">
+      </button>
+      <p class="text-gray-400 text-sm leading-relaxed">Licensed international recruitment and human resource company based in Nairobi, Kenya.</p>
+    </div>
+    <div>
+      <p class="text-white font-bold mb-4 text-sm">Navigate</p>
+      <ul class="space-y-2.5 text-sm text-gray-400">
+        <li><button data-nav="about" class="nav-btn hover:text-accent transition-colors">About Us</button></li>
+        <li><button data-nav="services" class="nav-btn hover:text-accent transition-colors">Services</button></li>
+        <li><button data-nav="jobs" class="nav-btn hover:text-accent transition-colors">Job Board</button></li>
+        <li><button data-nav="faq" class="nav-btn hover:text-accent transition-colors">FAQ</button></li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-white font-bold mb-4 text-sm">Contact</p>
+      <ul class="space-y-2.5 text-sm text-gray-400">
+        <li>+254 721 630 420</li>
+        <li>+254 753 646 819</li>
+        <li>alfimaagencyltd@gmail.com</li>
+        <li>Nairobi, Kenya</li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-white font-bold mb-4 text-sm">Follow Us</p>
+      <div class="flex gap-3">
+        <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.02 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.507 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.878h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.92 8.437-9.94z"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.256 1.216.6 1.772 1.153a4.908 4.908 0 011.153 1.772c.247.637.415 1.363.465 2.428.05 1.066.06 1.405.06 4.122s-.01 3.056-.06 4.122c-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 01-1.153 1.772 4.915 4.915 0 01-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.05-1.405.06-4.122.06s-3.056-.01-4.122-.06c-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 01-1.772-1.153 4.904 4.904 0 01-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.01 15.056 2 14.717 2 12s.01-3.056.06-4.122c.05-1.065.217-1.79.465-2.428a4.88 4.88 0 011.153-1.772A4.897 4.897 0 015.45 2.525c.637-.248 1.363-.415 2.428-.465C8.944 2.01 9.283 2 12 2zm0 5a5 5 0 100 10 5 5 0 000-10zm0 8.243A3.243 3.243 0 1112 8.757a3.243 3.243 0 010 6.486zm5.2-8.44a1.17 1.17 0 100-2.34 1.17 1.17 0 000 2.34z"/></svg>
+        </a>
+        <a href="https://wa.me/254116252454" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2.003c-5.518 0-9.997 4.478-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.116-1.343a9.96 9.96 0 004.885 1.244h.004c5.518 0 9.997-4.478 9.997-9.997 0-2.67-1.04-5.18-2.928-7.07a9.935 9.935 0 00-7.073-2.931zm0 18.174h-.003a8.163 8.163 0 01-4.16-1.138l-.298-.177-3.037.797.811-2.96-.194-.304a8.169 8.169 0 01-1.256-4.373c0-4.514 3.674-8.187 8.19-8.187a8.14 8.14 0 015.79 2.398 8.14 8.14 0 012.397 5.792c-.002 4.515-3.676 8.188-8.19 8.188z"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok" class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-accent hover:text-charcoal transition-colors">
+          <svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-6">
+    <p class="text-center text-gray-500 text-xs">© 2026 Al Fima Agency Ltd. All rights reserved. Licensed Recruitment Agency, Nairobi, Kenya.</p>
+  </div>
+</footer>
+
+<!-- ============ APPLICATION MODAL ============ -->
+<div id="applyModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+  <div id="modalBackdrop" class="modal-backdrop absolute inset-0 bg-charcoal/70 opacity-0"></div>
+  <div id="modalPanel" class="modal-panel relative bg-white rounded-xl w-full max-w-lg p-8 shadow-2xl opacity-0 scale-95 max-h-[90vh] overflow-y-auto">
+    <button id="modalClose" aria-label="Close" class="absolute top-4 right-4 text-gray-400 hover:text-charcoal">
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+    <p class="text-accent font-semibold text-xs mb-2">Job Application</p>
+    <h3 id="modalJobTitle" class="text-xl font-extrabold mb-1">Job Title</h3>
+    <p id="modalJobMeta" class="text-sm text-gray-500 mb-6">Country · Category</p>
+
+    <form id="applyForm" class="space-y-4">
+      <div>
+        <label for="ap-name" class="block text-sm font-semibold mb-1.5">Full Name</label>
+        <input id="ap-name" required type="text" placeholder="Your full name" class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none">
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label for="ap-phone" class="block text-sm font-semibold mb-1.5">Phone</label>
+          <input id="ap-phone" required type="tel" placeholder="07xx xxx xxx" class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none">
+        </div>
+        <div>
+          <label for="ap-email" class="block text-sm font-semibold mb-1.5">Email</label>
+          <input id="ap-email" required type="email" placeholder="you@example.com" class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none">
+        </div>
+      </div>
+      <div>
+        <label for="ap-experience" class="block text-sm font-semibold mb-1.5">Relevant Experience</label>
+        <textarea id="ap-experience" rows="3" placeholder="Briefly describe your experience related to this role..." class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none resize-none"></textarea>
+      </div>
+
+      <div class="dual-submit grid sm:grid-cols-2 gap-3 pt-1">
+        <button type="button" id="applyWhatsappBtn" class="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold py-3.5 rounded-md hover:brightness-95 transition-all text-sm">
+          <svg class="w-4.5 h-4.5" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2.003c-5.518 0-9.997 4.478-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.116-1.343a9.96 9.96 0 004.885 1.244h.004c5.518 0 9.997-4.478 9.997-9.997 0-2.67-1.04-5.18-2.928-7.07a9.935 9.935 0 00-7.073-2.931zm0 18.174h-.003a8.163 8.163 0 01-4.16-1.138l-.298-.177-3.037.797.811-2.96-.194-.304a8.169 8.169 0 01-1.256-4.373c0-4.514 3.674-8.187 8.19-8.187a8.14 8.14 0 015.79 2.398 8.14 8.14 0 012.397 5.792c-.002 4.515-3.676 8.188-8.19 8.188z"/></svg>
+          WhatsApp
+        </button>
+        <button type="button" id="applyEmailBtn" class="inline-flex items-center justify-center gap-2 btn-accent font-semibold py-3.5 rounded-md transition-colors text-sm">
+          <svg class="w-4.5 h-4.5" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+          Email
+        </button>
+      </div>
+      <p id="applyError" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-4 py-3">Something went wrong sending your application. Please try WhatsApp instead.</p>
+      <p id="applySuccess" class="hidden text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-4 py-3">Application received — our team will contact you via phone or email within 48 hours.</p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ============ PAGE ROUTING ============ */
+const pages = ['home','about','services','jobs','faq','contact'];
+function goToPage(name){
+  if(!pages.includes(name)) name = 'home';
+  pages.forEach(p=>{
+    const el = document.getElementById('page-'+p);
+    if(p === name){
+      el.classList.add('active');
+      requestAnimationFrame(()=> el.classList.add('show'));
+    } else {
+      el.classList.remove('show');
+      el.classList.remove('active');
+    }
+  });
+  document.querySelectorAll('.nav-link, #mobileMenu .nav-btn').forEach(btn=>{
+    if(btn.dataset.nav === name) btn.classList.add('active-link');
+    else btn.classList.remove('active-link');
+  });
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  closeMobileMenu();
+  history.replaceState(null, '', '#'+name);
+  runFadeUps();
+}
+document.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.nav-btn');
+  if(btn){ e.preventDefault(); goToPage(btn.dataset.nav); }
+});
+window.addEventListener('DOMContentLoaded', ()=>{
+  const initial = (location.hash || '#home').replace('#','');
+  goToPage(initial);
+});
+
+/* ============ MOBILE MENU ============ */
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const iconMenu = document.getElementById('iconMenu');
+const iconClose = document.getElementById('iconClose');
+function closeMobileMenu(){
+  mobileMenu.classList.add('hidden');
+  iconMenu.classList.remove('hidden');
+  iconClose.classList.add('hidden');
+  mobileMenuBtn.setAttribute('aria-expanded','false');
+}
+mobileMenuBtn.addEventListener('click', ()=>{
+  const isHidden = mobileMenu.classList.contains('hidden');
+  mobileMenu.classList.toggle('hidden');
+  iconMenu.classList.toggle('hidden');
+  iconClose.classList.toggle('hidden');
+  mobileMenuBtn.setAttribute('aria-expanded', String(isHidden));
+});
+
+/* ============ SCROLL FADE-INS ============ */
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, {threshold: 0.12});
+function runFadeUps(){
+  document.querySelectorAll('.page-section.active .fade-up:not(.in-view)').forEach((el, i)=>{
+    el.style.transitionDelay = Math.min(i*60, 300)+'ms';
+    observer.observe(el);
+  });
+}
+
+/* ============ JOB DATA ============ */
+const jobs = [
+  {
+    title: 'Certified Caregiver',
+    country: 'Germany',
+    category: 'Caregiving',
+    salary: 'KES 180,000 – 220,000 / month',
+    flagEmoji: '🇩🇪',
+    desc: 'Provide daily living support and companionship to elderly residents in a licensed care facility near Munich.'
+  },
+  {
+    title: 'Elderly Care Assistant',
+    country: 'Canada',
+    category: 'Caregiving',
+    salary: 'KES 210,000 – 260,000 / month',
+    flagEmoji: '🇨🇦',
+    desc: 'Support seniors with mobility, medication reminders, and companionship in a private residential care setting.'
+  },
+  {
+    title: 'Logistics Associate',
+    country: 'Dubai, UAE',
+    category: 'General Employment',
+    salary: 'KES 90,000 – 120,000 / month',
+    flagEmoji: '🇦🇪',
+    desc: 'Handle inventory management, order fulfilment, and warehouse operations for a growing distribution company.'
+  },
+  {
+    title: 'Hospitality Staff',
+    country: 'Canada',
+    category: 'General Employment',
+    salary: 'KES 160,000 – 190,000 / month',
+    flagEmoji: '🇨🇦',
+    desc: 'Front-of-house and housekeeping roles available at a 4-star hotel group in Alberta.'
+  },
+  {
+    title: 'Domestic Housekeeper',
+    country: 'Saudi Arabia',
+    category: 'Household',
+    salary: 'KES 70,000 – 95,000 / month',
+    flagEmoji: '🇸🇦',
+    desc: 'Manage household chores and childcare support for a verified family employer in Riyadh.'
+  },
+  {
+    title: 'Retail Sales Associate',
+    country: 'Dubai, UAE',
+    category: 'General Employment',
+    salary: 'KES 95,000 – 115,000 / month',
+    flagEmoji: '🇦🇪',
+    desc: 'Assist customers on the shop floor of a major retail chain in a busy Dubai mall location.'
+  }
+];
+
+const jobGrid = document.getElementById('jobGrid');
+function renderJobs(filter){
+  jobGrid.innerHTML = '';
+  const list = filter === 'all' ? jobs : jobs.filter(j=>j.category === filter);
+  list.forEach(job=>{
+    const card = document.createElement('div');
+    card.className = 'fade-up lift-card bg-white rounded-xl border border-gray-100 shadow-card p-7 flex flex-col';
+    card.innerHTML = `
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-xs font-bold tracking-wide text-accent bg-accent/10 rounded-full px-3 py-1">${job.category}</span>
+        <span class="text-xl" aria-hidden="true">${job.flagEmoji}</span>
+      </div>
+      <h3 class="text-lg font-bold mb-1">${job.title}</h3>
+      <p class="text-sm text-gray-500 mb-3">${job.country}</p>
+      <p class="text-sm text-gray-600 leading-relaxed mb-4 flex-1">${job.desc}</p>
+      <p class="text-sm font-semibold text-charcoal mb-5">${job.salary}</p>
+      <button class="apply-btn w-full btn-accent font-semibold py-3 rounded-md transition-colors" data-title="${job.title}" data-country="${job.country}" data-category="${job.category}">Apply Now</button>
+    `;
+    jobGrid.appendChild(card);
+  });
+  runFadeUps();
+}
+renderJobs('all');
+
+document.getElementById('jobFilters').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active-filter'));
+  btn.classList.add('active-filter');
+  renderJobs(btn.dataset.filter);
+});
+
+/* ============ FORMSPREE CONFIG ============ */
+/* TODO: Replace with your real Formspree endpoint(s) from https://formspree.io */
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const WHATSAPP_NUMBER = "254116252454"; // 0116 252 454
+
+function isFormspreeConfigured(){
+  return FORMSPREE_ENDPOINT.indexOf('YOUR_FORM_ID') === -1;
+}
+
+async function sendToFormspree(payload, successEl, errorEl, formEl, submitBtns){
+  if(!isFormspreeConfigured()){
+    errorEl.textContent = "Email submissions aren't set up yet — please use WhatsApp instead, or contact the site owner to connect Formspree.";
+    errorEl.classList.remove('hidden');
+    successEl.classList.add('hidden');
+    return;
+  }
+  errorEl.classList.add('hidden');
+  submitBtns.forEach(b=> b.disabled = true);
+  try{
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if(res.ok){
+      formEl.querySelectorAll('input, textarea, select').forEach(el=>el.classList.add('hidden'));
+      formEl.querySelectorAll('.dual-submit, label').forEach(el=>el.classList.add('hidden'));
+      successEl.classList.remove('hidden');
+    } else {
+      throw new Error('Formspree responded with an error');
+    }
+  } catch(err){
+    errorEl.textContent = "Something went wrong sending your message. Please try WhatsApp instead, or email us directly.";
+    errorEl.classList.remove('hidden');
+    submitBtns.forEach(b=> b.disabled = false);
+  }
+}
+
+/* ============ APPLY MODAL ============ */
+const applyModal = document.getElementById('applyModal');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalPanel = document.getElementById('modalPanel');
+const modalJobTitle = document.getElementById('modalJobTitle');
+const modalJobMeta = document.getElementById('modalJobMeta');
+const applySuccess = document.getElementById('applySuccess');
+const applyError = document.getElementById('applyError');
+const applyForm = document.getElementById('applyForm');
+let currentJob = { title:'', country:'', category:'' };
+
+function openModal(title, country, category){
+  currentJob = { title, country, category };
+  modalJobTitle.textContent = title;
+  modalJobMeta.textContent = country + ' · ' + category;
+  applySuccess.classList.add('hidden');
+  applyError.classList.add('hidden');
+  applyForm.reset();
+  applyForm.querySelectorAll('input, textarea, select, .dual-submit, label').forEach(el=>el.classList.remove('hidden'));
+  applyModal.classList.remove('hidden');
+  applyModal.classList.add('flex');
+  requestAnimationFrame(()=>{
+    modalBackdrop.classList.remove('opacity-0');
+    modalPanel.classList.remove('opacity-0','scale-95');
+  });
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modalBackdrop.classList.add('opacity-0');
+  modalPanel.classList.add('opacity-0','scale-95');
+  setTimeout(()=>{
+    applyModal.classList.add('hidden');
+    applyModal.classList.remove('flex');
+    document.body.style.overflow = '';
+  }, 250);
+}
+document.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.apply-btn');
+  if(btn) openModal(btn.dataset.title, btn.dataset.country, btn.dataset.category);
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', closeModal);
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && !applyModal.classList.contains('hidden')) closeModal(); });
+
+function getApplyFields(){
+  return {
+    name: document.getElementById('ap-name').value.trim(),
+    phone: document.getElementById('ap-phone').value.trim(),
+    email: document.getElementById('ap-email').value.trim(),
+    experience: document.getElementById('ap-experience').value.trim()
+  };
+}
+
+document.getElementById('applyWhatsappBtn').addEventListener('click', ()=>{
+  if(!applyForm.reportValidity()) return;
+  const f = getApplyFields();
+  const lines = [
+    `Job Application: ${currentJob.title}`,
+    `Country: ${currentJob.country}`,
+    `Category: ${currentJob.category}`,
+    ``,
+    `Name: ${f.name}`,
+    `Phone: ${f.phone}`,
+    `Email: ${f.email}`,
+    `Experience: ${f.experience || 'N/A'}`
+  ];
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+  window.open(url, '_blank');
+});
+
+document.getElementById('applyEmailBtn').addEventListener('click', ()=>{
+  if(!applyForm.reportValidity()) return;
+  const f = getApplyFields();
+  sendToFormspree(
+    {
+      _subject: `Job Application: ${currentJob.title} (${currentJob.country})`,
+      job_title: currentJob.title,
+      job_country: currentJob.country,
+      job_category: currentJob.category,
+      name: f.name,
+      phone: f.phone,
+      email: f.email,
+      experience: f.experience
+    },
+    applySuccess,
+    applyError,
+    applyForm,
+    [document.getElementById('applyWhatsappBtn'), document.getElementById('applyEmailBtn')]
+  );
+});
+
+/* ============ CONTACT FORM ============ */
+const contactForm = document.getElementById('contactForm');
+const contactSuccess = document.getElementById('contactSuccess');
+const contactError = document.getElementById('contactError');
+
+function getContactFields(){
+  return {
+    name: document.getElementById('cf-name').value.trim(),
+    email: document.getElementById('cf-email').value.trim(),
+    phone: document.getElementById('cf-phone').value.trim(),
+    interest: document.getElementById('cf-interest').value,
+    message: document.getElementById('cf-message').value.trim()
+  };
+}
+
+document.getElementById('contactWhatsappBtn').addEventListener('click', ()=>{
+  if(!contactForm.reportValidity()) return;
+  const f = getContactFields();
+  const lines = [
+    `New enquiry from the website`,
+    ``,
+    `Name: ${f.name}`,
+    `Email: ${f.email}`,
+    `Phone: ${f.phone}`,
+    `Area of Interest: ${f.interest}`,
+    `Message: ${f.message}`
+  ];
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+  window.open(url, '_blank');
+});
+
+document.getElementById('contactEmailBtn').addEventListener('click', ()=>{
+  if(!contactForm.reportValidity()) return;
+  const f = getContactFields();
+  sendToFormspree(
+    {
+      _subject: `Website Contact Form: ${f.interest}`,
+      name: f.name,
+      email: f.email,
+      phone: f.phone,
+      interest: f.interest,
+      message: f.message
+    },
+    contactSuccess,
+    contactError,
+    contactForm,
+    [document.getElementById('contactWhatsappBtn'), document.getElementById('contactEmailBtn')]
+  );
+});
+
+/* ============ FAQ ACCORDION ============ */
+const faqs = [
+  {
+    q: 'How long does the recruitment and deployment process take?',
+    a: 'Processing time varies by destination and role, but most candidates complete the full journey — from application to deployment — within 2 to 4 months. This includes employer matching, documentation, medical checks, visa processing, and pre-deployment training.'
+  },
+  {
+    q: 'Is Al Fima Agency fully licensed?',
+    a: 'Yes. Al Fima Agency Ltd is a fully licensed recruitment and human resource company operating under Kenyan labour export regulations. We only work with verified employers and registered partner agencies abroad.'
+  },
+  {
+    q: 'What documents are required for Canada or Germany placements?',
+    a: 'Typically you will need a valid passport, national ID, academic or professional certificates, a police clearance certificate, and a medical fitness report. Our team provides a full checklist specific to your destination once your application is shortlisted.'
+  },
+  {
+    q: 'How does the pre-deployment training work?',
+    a: 'Every candidate completes mandatory training before departure, covering role-specific skills, workplace safety, basic language preparation, and cultural orientation for their destination country. Training is arranged directly by Al Fima Agency ahead of your travel date.'
+  },
+  {
+    q: 'Are there any upfront fees to apply?',
+    a: 'We are transparent about all costs from the first conversation. Reach out to our team via phone, email, or WhatsApp for a clear breakdown specific to your role and destination before you commit to anything.'
+  },
+  {
+    q: 'Can I apply for more than one job listing at a time?',
+    a: 'Yes, though we recommend focusing on the roles that best match your experience and destination preference so our team can prioritise your strongest applications.'
+  }
+];
+const faqList = document.getElementById('faqList');
+faqs.forEach((item, i)=>{
+  const wrap = document.createElement('div');
+  wrap.className = 'fade-up border border-gray-200 rounded-lg overflow-hidden';
+  wrap.innerHTML = `
+    <button class="faq-toggle w-full flex items-center justify-between gap-4 text-left px-6 py-5 font-semibold hover:bg-gray-50 transition-colors" aria-expanded="false">
+      <span>${item.q}</span>
+      <svg class="faq-icon w-5 h-5 text-accent flex-shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+    </button>
+    <div class="faq-panel px-6">
+      <p class="text-gray-600 text-sm leading-relaxed pb-5">${item.a}</p>
+    </div>
+  `;
+  faqList.appendChild(wrap);
+});
+faqList.addEventListener('click', (e)=>{
+  const toggle = e.target.closest('.faq-toggle');
+  if(!toggle) return;
+  const panel = toggle.nextElementSibling;
+  const icon = toggle.querySelector('.faq-icon');
+  const isOpen = panel.style.maxHeight && panel.style.maxHeight !== '0px';
+  document.querySelectorAll('.faq-panel').forEach(p=>{ p.style.maxHeight = '0px'; });
+  document.querySelectorAll('.faq-icon').forEach(i=>{ i.style.transform = 'rotate(0deg)'; });
+  document.querySelectorAll('.faq-toggle').forEach(t=>t.setAttribute('aria-expanded','false'));
+  if(!isOpen){
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    icon.style.transform = 'rotate(180deg)';
+    toggle.setAttribute('aria-expanded','true');
+  }
+});
+
+/* Initial fade-up run for the home page on load */
+window.addEventListener('load', runFadeUps);
+</script>
+
+</body>
+</html>
