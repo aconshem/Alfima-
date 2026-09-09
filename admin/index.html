@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — Al Fima Agency</title>
+<link rel="icon" type="image/png" href="../assets/images/favicon-32.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { charcoal: '#111827', accent: '#F4EE64', accentGold: '#78730A' },
+      fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','sans-serif'] }
+    } }
+  }
+</script>
+<style>
+  body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  .btn-accent { background:#F4EE64; color:#111827; }
+  .btn-accent:hover { background:#EFE728; }
+  .btn-accent:disabled { opacity:.6; cursor:not-allowed; }
+  .tab-btn.active { border-color:#F4EE64; color:#111827; }
+  .badge-pending { background:#FEF3C7; color:#92400E; }
+  .badge-approved { background:#DCFCE7; color:#166534; }
+  .badge-revoked { background:#FEE2E2; color:#991B1B; }
+</style>
+</head>
+<body class="bg-gray-50 text-charcoal min-h-screen">
+
+<div id="app" class="min-h-screen"></div>
+
+<script>
+const $ = (sel, root=document) => root.querySelector(sel);
+const state = { user: null, content: null, users: [], activity: [] };
+
+async function api(path, opts={}) {
+  const res = await fetch(path, {
+    method: opts.method || 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  let data = {};
+  try { data = await res.json(); } catch {}
+  if (!res.ok) throw new Error(data.error || 'Something went wrong');
+  return data;
+}
+
+function render() {
+  const app = $('#app');
+  app.innerHTML = state.user ? dashboardHTML() : authHTML();
+  wireEvents();
+}
+
+/* ============ AUTH SCREEN ============ */
+function authHTML() {
+  return `
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <img src="../assets/images/logo.png" alt="Al Fima Agency" class="h-14 mx-auto mb-4">
+        <p class="text-gray-500 text-sm">Admin Panel</p>
+      </div>
+
+      <div class="bg-white rounded-xl border border-gray-100 shadow p-8">
+        <div id="loginView">
+          <h1 class="text-xl font-bold mb-6">Log in</h1>
+          <form id="loginForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-1.5">Email</label>
+              <input id="li-email" type="email" required class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1.5">Password</label>
+              <input id="li-password" type="password" required class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+            </div>
+            <p id="loginError" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2"></p>
+            <button type="submit" class="w-full btn-accent font-semibold py-2.5 rounded-md">Log In</button>
+          </form>
+          <button id="showSignup" class="w-full text-center text-sm text-accentGold font-semibold mt-5">Request staff access →</button>
+        </div>
+
+        <div id="signupView" class="hidden">
+          <h1 class="text-xl font-bold mb-6">Request staff access</h1>
+          <form id="signupForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-1.5">Full Name</label>
+              <input id="su-name" type="text" required class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1.5">Email</label>
+              <input id="su-email" type="email" required class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1.5">Password (min. 8 characters)</label>
+              <input id="su-password" type="password" required minlength="8" class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+            </div>
+            <p id="signupError" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2"></p>
+            <p id="signupSuccess" class="hidden text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-3 py-2"></p>
+            <button type="submit" class="w-full btn-accent font-semibold py-2.5 rounded-md">Submit Request</button>
+          </form>
+          <button id="showLogin" class="w-full text-center text-sm text-accentGold font-semibold mt-5">← Back to log in</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============ DASHBOARD ============ */
+function dashboardHTML() {
+  const isSuper = state.user.role === 'superadmin';
+  return `
+  <header class="bg-charcoal">
+    <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="../assets/images/logo-white.png" alt="Al Fima Agency" class="h-8">
+        <span class="text-gray-400 text-sm hidden sm:inline">Admin Panel</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-gray-300">${state.user.name} <span class="text-gray-500">(${state.user.role})</span></span>
+        <button id="logoutBtn" class="text-sm font-semibold text-white/80 hover:text-accent">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-5 py-8">
+    <div class="flex gap-6 border-b border-gray-200 mb-8">
+      <button data-tab="content" class="tab-btn active px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500">Site Content</button>
+      ${isSuper ? `<button data-tab="users" class="tab-btn px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500">Users</button>` : ''}
+      <button data-tab="activity" class="tab-btn px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500">Activity Log</button>
+    </div>
+
+    <div id="tabContent"></div>
+  </div>`;
+}
+
+function contentTabHTML() {
+  const c = state.content?.contact || {};
+  const jobs = state.content?.jobs || [];
+  return `
+  <div class="space-y-10">
+    <section class="bg-white rounded-xl border border-gray-100 shadow p-7">
+      <h2 class="text-lg font-bold mb-5">Contact Information</h2>
+      <div class="grid sm:grid-cols-2 gap-5">
+        ${contactField('phone1','Phone Number 1', c.phone1)}
+        ${contactField('phone2','Phone Number 2', c.phone2)}
+        ${contactField('whatsapp','WhatsApp (digits only, e.g. 254116252454)', c.whatsapp)}
+        ${contactField('email','Email Address', c.email)}
+        ${contactField('location','Office Location', c.location)}
+        ${contactField('facebook','Facebook URL', c.facebook)}
+        ${contactField('instagram','Instagram URL', c.instagram)}
+        ${contactField('linkedin','LinkedIn URL', c.linkedin)}
+        ${contactField('tiktok','TikTok URL', c.tiktok)}
+      </div>
+    </section>
+
+    <section class="bg-white rounded-xl border border-gray-100 shadow p-7">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-lg font-bold">Job Listings</h2>
+        <button id="addJobBtn" class="text-sm font-semibold btn-accent px-4 py-2 rounded-md">+ Add Job</button>
+      </div>
+      <div id="jobsList" class="space-y-5">
+        ${jobs.map((j,i)=>jobCardHTML(j,i)).join('')}
+      </div>
+    </section>
+
+    <p id="contentError" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-4 py-3"></p>
+    <p id="contentSuccess" class="hidden text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-4 py-3"></p>
+    <button id="saveContentBtn" class="btn-accent font-semibold px-8 py-3 rounded-md">Save Changes</button>
+  </div>`;
+}
+
+function contactField(id, label, value) {
+  return `
+  <div>
+    <label class="block text-sm font-semibold mb-1.5">${label}</label>
+    <input data-contact-field="${id}" type="text" value="${(value||'').replace(/"/g,'&quot;')}" class="w-full rounded-md border border-gray-300 px-4 py-2.5 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+  </div>`;
+}
+
+function jobCardHTML(job, index) {
+  const categories = ['Caregiving','General Employment','Household'];
+  return `
+  <div class="job-card border border-gray-200 rounded-lg p-5" data-index="${index}">
+    <div class="grid sm:grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-gray-500">Job Title</label>
+        <input data-job-field="title" type="text" value="${(job.title||'').replace(/"/g,'&quot;')}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-gray-500">Country</label>
+        <input data-job-field="country" type="text" value="${(job.country||'').replace(/"/g,'&quot;')}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-gray-500">Category</label>
+        <select data-job-field="category" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none bg-white">
+          ${categories.map(cat=>`<option value="${cat}" ${job.category===cat?'selected':''}>${cat}</option>`).join('')}
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-gray-500">Salary Estimate</label>
+        <input data-job-field="salary" type="text" value="${(job.salary||'').replace(/"/g,'&quot;')}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-gray-500">Flag Emoji (optional)</label>
+        <input data-job-field="flagEmoji" type="text" value="${(job.flagEmoji||'').replace(/"/g,'&quot;')}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none">
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="block text-xs font-semibold mb-1 text-gray-500">Description</label>
+      <textarea data-job-field="desc" rows="2" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-accentGold focus:ring-1 focus:ring-accentGold outline-none resize-none">${job.desc||''}</textarea>
+    </div>
+    <button class="removeJobBtn text-sm font-semibold text-red-600 hover:text-red-800">Remove this listing</button>
+  </div>`;
+}
+
+function usersTabHTML() {
+  const groups = { pending: [], approved: [], revoked: [] };
+  state.users.forEach(u => { (groups[u.status] || groups.pending).push(u); });
+
+  const row = (u) => `
+    <tr class="border-b border-gray-100">
+      <td class="py-3 pr-4">
+        <p class="font-semibold">${u.name}</p>
+        <p class="text-gray-500 text-xs">${u.email}</p>
+      </td>
+      <td class="py-3 pr-4"><span class="text-xs font-semibold px-2.5 py-1 rounded-full badge-${u.status}">${u.status}</span></td>
+      <td class="py-3 text-right">
+        ${u.status === 'pending' ? `<button class="approveBtn text-sm font-semibold text-green-700 hover:text-green-900 mr-4" data-id="${u.id}">Approve</button>` : ''}
+        ${u.status !== 'revoked' ? `<button class="revokeBtn text-sm font-semibold text-red-600 hover:text-red-800" data-id="${u.id}">Revoke</button>` : ''}
+      </td>
+    </tr>`;
+
+  const allUsers = [...groups.pending, ...groups.approved, ...groups.revoked];
+
+  return `
+  <section class="bg-white rounded-xl border border-gray-100 shadow p-7">
+    <h2 class="text-lg font-bold mb-5">Staff Accounts</h2>
+    ${allUsers.length === 0
+      ? `<p class="text-gray-500 text-sm">No staff requests yet.</p>`
+      : `<table class="w-full text-sm"><tbody>${allUsers.map(row).join('')}</tbody></table>`}
+  </section>`;
+}
+
+function activityTabHTML() {
+  if (state.activity.length === 0) {
+    return `<section class="bg-white rounded-xl border border-gray-100 shadow p-7"><p class="text-gray-500 text-sm">No activity recorded yet.</p></section>`;
+  }
+  const row = (a) => `
+    <li class="py-3 border-b border-gray-100 text-sm">
+      <span class="text-gray-400 text-xs">${new Date(a.ts).toLocaleString()}</span>
+      <span class="font-semibold ml-2">${a.actor}</span>
+      <span class="text-gray-600"> — ${a.detail || a.action}</span>
+    </li>`;
+  return `
+  <section class="bg-white rounded-xl border border-gray-100 shadow p-7">
+    <h2 class="text-lg font-bold mb-4">Recent Activity</h2>
+    <ul>${state.activity.map(row).join('')}</ul>
+  </section>`;
+}
+
+let activeTab = 'content';
+
+async function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  const container = $('#tabContent');
+  container.innerHTML = '<p class="text-gray-400 text-sm">Loading…</p>';
+
+  if (tab === 'content') {
+    if (!state.content) state.content = await api('/api/content');
+    container.innerHTML = contentTabHTML();
+  } else if (tab === 'users') {
+    const data = await api('/api/users/list');
+    state.users = data.users;
+    container.innerHTML = usersTabHTML();
+  } else if (tab === 'activity') {
+    const data = await api('/api/activity');
+    state.activity = data.activity;
+    container.innerHTML = activityTabHTML();
+  }
+  wireTabEvents();
+}
+
+function wireTabEvents() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  if (activeTab === 'content') {
+    $('#addJobBtn')?.addEventListener('click', () => {
+      state.content.jobs.push({ title:'', country:'', category:'General Employment', salary:'', flagEmoji:'', desc:'' });
+      $('#jobsList').innerHTML = state.content.jobs.map((j,i)=>jobCardHTML(j,i)).join('');
+      wireJobCardEvents();
+    });
+    wireJobCardEvents();
+
+    $('#saveContentBtn')?.addEventListener('click', async () => {
+      const errorEl = $('#contentError'), successEl = $('#contentSuccess');
+      errorEl.classList.add('hidden'); successEl.classList.add('hidden');
+
+      const contact = {};
+      document.querySelectorAll('[data-contact-field]').forEach(input => {
+        contact[input.dataset.contactField] = input.value.trim();
+      });
+
+      const jobs = [];
+      document.querySelectorAll('.job-card').forEach(card => {
+        const job = {};
+        card.querySelectorAll('[data-job-field]').forEach(f => { job[f.dataset.jobField] = f.value.trim(); });
+        jobs.push(job);
+      });
+
+      try {
+        await api('/api/content', { method:'POST', body:{ contact, jobs } });
+        state.content = { contact, jobs };
+        successEl.textContent = 'Saved — changes are live on the site now.';
+        successEl.classList.remove('hidden');
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.classList.remove('hidden');
+      }
+    });
+  }
+
+  if (activeTab === 'users') {
+    document.querySelectorAll('.approveBtn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await api('/api/users/approve', { method:'POST', body:{ id: btn.dataset.id } });
+        switchTab('users');
+      });
+    });
+    document.querySelectorAll('.revokeBtn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Revoke this user\'s access?')) return;
+        await api('/api/users/revoke', { method:'POST', body:{ id: btn.dataset.id } });
+        switchTab('users');
+      });
+    });
+  }
+}
+
+function wireJobCardEvents() {
+  document.querySelectorAll('.removeJobBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.job-card');
+      const index = parseInt(card.dataset.index, 10);
+      state.content.jobs.splice(index, 1);
+      $('#jobsList').innerHTML = state.content.jobs.map((j,i)=>jobCardHTML(j,i)).join('');
+      wireJobCardEvents();
+    });
+  });
+}
+
+function wireEvents() {
+  if (state.user) {
+    $('#logoutBtn')?.addEventListener('click', async () => {
+      await api('/api/auth/logout', { method:'POST' });
+      state.user = null; state.content = null;
+      render();
+    });
+    switchTab('content');
+    return;
+  }
+
+  $('#showSignup')?.addEventListener('click', () => { $('#loginView').classList.add('hidden'); $('#signupView').classList.remove('hidden'); });
+  $('#showLogin')?.addEventListener('click', () => { $('#signupView').classList.add('hidden'); $('#loginView').classList.remove('hidden'); });
+
+  $('#loginForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = $('#loginError');
+    errorEl.classList.add('hidden');
+    try {
+      const data = await api('/api/auth/login', { method:'POST', body:{
+        email: $('#li-email').value.trim(),
+        password: $('#li-password').value
+      }});
+      state.user = data.user;
+      render();
+    } catch (err) {
+      errorEl.textContent = err.message;
+      errorEl.classList.remove('hidden');
+    }
+  });
+
+  $('#signupForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = $('#signupError'), successEl = $('#signupSuccess');
+    errorEl.classList.add('hidden'); successEl.classList.add('hidden');
+    try {
+      const data = await api('/api/auth/signup', { method:'POST', body:{
+        name: $('#su-name').value.trim(),
+        email: $('#su-email').value.trim(),
+        password: $('#su-password').value
+      }});
+      successEl.textContent = data.message;
+      successEl.classList.remove('hidden');
+      $('#signupForm').reset();
+    } catch (err) {
+      errorEl.textContent = err.message;
+      errorEl.classList.remove('hidden');
+    }
+  });
+}
+
+(async function init() {
+  try {
+    const data = await api('/api/auth/me');
+    if (data.authenticated) state.user = data.user;
+  } catch {}
+  render();
+})();
+</script>
+
+</body>
+</html>
