@@ -128,7 +128,8 @@ function dashboardHTML() {
     <div class="flex gap-6 border-b border-gray-200 mb-8">
       <button data-tab="content" class="tab-btn active px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500">Site Content</button>
       ${isSuper ? `<button data-tab="users" class="tab-btn px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500">Users</button>` : ''}
-      <button data-tab="activity" class="tab-btn px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500">Activity Log</button>
+      ${isSuper ? `<button data-tab="activity" class="tab-btn px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500">Activity Log</button>` : ''}
+      <a href="create-cv/index.html" class="px-1 pb-3 border-b-2 border-transparent font-semibold text-sm text-gray-500 hover:text-charcoal">Create CV</a>
     </div>
 
     <div id="tabContent"></div>

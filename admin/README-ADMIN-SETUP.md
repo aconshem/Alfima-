@@ -64,10 +64,41 @@ takes effect immediately, even if they're already logged in.
 fields or add/remove job cards → **Save Changes**. The public site reads
 this live, so changes appear right away.
 
+## Create CV
+
+There's also a **Create CV** page (linked from the top of the dashboard)
+for generating the official FRST National application-for-employment PDF
+for one candidate at a time. It runs entirely in the browser — no server
+involved except to check you're logged in.
+
+How it works:
+1. Upload a passport photo/scan. The page first tries to read the
+   Machine Readable Zone (the two lines of text at the bottom of the photo
+   page) and checksum-validates it — this is the most reliable path.
+2. If that fails, it automatically falls back to full-page OCR and pulls
+   out what it can with pattern matching.
+3. Every autofilled field stays fully editable. Anything the extraction
+   wasn't confident about is highlighted in amber — always double-check
+   those before generating.
+4. Upload a headshot and a full-body photo, fill in everything the
+   passport can't tell you (phone number, position, salary, religion,
+   marital status, etc.), and the live preview on the right updates as
+   you type.
+5. **Generate PDF** downloads the finished two-page CV (the form itself,
+   then the passport scan as page 2) and logs the action — who generated
+   a CV for which candidate, and when — to the Activity Log.
+
+The visual template (fonts, borders, bilingual Arabic labels, the blue/
+orange side bar, photo placement) is built to match the official Word
+template as closely as possible. The Arabic labels are reproduced exactly
+as they appear in that template, right-aligned — nothing was reworded or
+re-centered.
+
 ## Notes
 
-- Staff accounts can edit site content but cannot approve/revoke other
-  users — only the super admin account can do that.
+- Staff accounts can edit site content and generate CVs, but cannot
+  approve/revoke other users or view the Activity Log — those are
+  super-admin only.
 - Passwords are never stored in plain text (hashed with scrypt) and session
   cookies are HTTP-only, so they can't be read by page scripts.
 - If you ever need a second super admin, you'd add another set of env vars
