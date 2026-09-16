@@ -74,12 +74,12 @@
         <div class="field"><label>Nationality</label><input type="text" id="f-nationality"></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>Date of Birth</label><input type="text" id="f-dob" placeholder="DD/MM/YYYY"></div>
+        <div class="field"><label>Date of Birth</label><input type="date" id="f-dob"></div>
         <div class="field"><label>Age</label><input type="text" id="f-age"></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>Date of Issue</label><input type="text" id="f-issuedate" placeholder="DD/MM/YYYY"></div>
-        <div class="field"><label>Date of Expiry</label><input type="text" id="f-expirydate" placeholder="DD/MM/YYYY"></div>
+        <div class="field"><label>Date of Issue</label><input type="date" id="f-issuedate"></div>
+        <div class="field"><label>Date of Expiry</label><input type="date" id="f-expirydate"></div>
       </div>
       <div class="field"><label>Place of Issue</label><input type="text" id="f-issueplace"></div>
 
@@ -96,7 +96,13 @@
       </div>
       <div class="field-row">
         <div class="field"><label>Weight (kg)</label><input type="text" id="f-weight"></div>
-        <div class="field"><label>Height (ft)</label><input type="text" id="f-height"></div>
+        <div class="field">
+          <label>Height</label>
+          <div class="field-row">
+            <input type="number" id="f-height-ft" placeholder="Feet" min="0" max="8">
+            <input type="number" id="f-height-in" placeholder="Inches" min="0" max="11">
+          </div>
+        </div>
       </div>
     </div>
 

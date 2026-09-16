@@ -52,7 +52,7 @@ body {
 
 .field { margin-bottom: 12px; }
 .field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #374151; }
-.field input[type=text], .field input[type=number], .field select, .field textarea {
+.field input[type=text], .field input[type=number], .field input[type=date], .field select, .field textarea {
   width: 100%;
   border: 1px solid #d1d5db;
   border-radius: 6px;

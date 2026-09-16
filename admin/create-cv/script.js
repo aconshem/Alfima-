@@ -191,6 +191,36 @@ function normalizeDate(str) {
   return str;
 }
 
+/* ---------------------------------------------------------------------
+   Date helpers — inputs use native <input type="date"> (ISO YYYY-MM-DD)
+   for the calendar picker; the CV preview displays DD/MM/YYYY, matching
+   the template.
+--------------------------------------------------------------------- */
+function displayToIso(display) {
+  const m = (display || '').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  return m ? `${m[3]}-${m[2]}-${m[1]}` : '';
+}
+function isoToDisplay(iso) {
+  const m = (iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : '';
+}
+
+// Kenyan (and most) passports are valid for exactly 10 years minus a day
+// (e.g. issued 08/06/2026 -> expires 07/06/2036) — confirmed against a
+// real passport. Used to fill in whichever of the two dates OCR/MRZ missed.
+function shiftDisplayDate(display, yearsDelta, dayDelta) {
+  const m = (display || '').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!m) return '';
+  const d = new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10));
+  d.setFullYear(d.getFullYear() + yearsDelta);
+  d.setDate(d.getDate() + dayDelta);
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  return `${dd}/${mm}/${d.getFullYear()}`;
+}
+const computeExpiryFromIssue = (issueDisplay) => shiftDisplayDate(issueDisplay, 10, -1);
+const computeIssueFromExpiry = (expiryDisplay) => shiftDisplayDate(expiryDisplay, -10, 1);
+
 /* =====================================================================
    3. WIRE UP PASSPORT UPLOAD -> EXTRACTION -> AUTOFILL
 ===================================================================== */
@@ -204,7 +234,7 @@ function setStatus(el, text, type) {
   el.style.display = text ? 'block' : 'none';
 }
 
-function markField(inputId, needsReview) {
+function markField(inputId, needsReview, message) {
   const input = document.getElementById(inputId);
   if (!input) return;
   const field = input.closest('.field');
@@ -212,12 +242,13 @@ function markField(inputId, needsReview) {
     input.classList.add('needs-review');
     if (field) {
       field.classList.add('flagged');
-      if (!field.querySelector('.review-flag')) {
-        const flag = document.createElement('div');
+      let flag = field.querySelector('.review-flag');
+      if (!flag) {
+        flag = document.createElement('div');
         flag.className = 'review-flag';
-        flag.textContent = 'Please double-check this — OCR was not fully confident.';
         field.appendChild(flag);
       }
+      flag.textContent = message || 'Please double-check this — OCR was not fully confident.';
     }
   } else {
     input.classList.remove('needs-review');
@@ -225,12 +256,12 @@ function markField(inputId, needsReview) {
   }
 }
 
-function fillField(id, value, trusted) {
+function fillField(id, value, trusted, message) {
   if (value === undefined || value === null || value === '') return;
   const input = document.getElementById(id);
   if (!input) return;
-  input.value = value;
-  markField(id, !trusted);
+  input.value = input.type === 'date' ? displayToIso(value) : value;
+  markField(id, !trusted, message);
   input.dispatchEvent(new Event('input'));
 }
 
@@ -301,6 +332,18 @@ function applyExtractedFields(fields, trusted, checks) {
   const dobTrust = checks ? checks.dobValid : trusted;
   const expiryTrust = checks ? checks.expiryValid : trusted;
 
+  // If only one of issue/expiry date was captured, compute the other from the
+  // fixed 10-years-minus-a-day rule. If both were captured independently,
+  // leave them exactly as read — never override real extracted data.
+  let computedIssue = false, computedExpiry = false;
+  if (fields.expiry && !fields.issueDate) {
+    fields.issueDate = computeIssueFromExpiry(fields.expiry);
+    computedIssue = true;
+  } else if (fields.issueDate && !fields.expiry) {
+    fields.expiry = computeExpiryFromIssue(fields.issueDate);
+    computedExpiry = true;
+  }
+
   if (fields.fullName) fillField('f-fullname', fields.fullName, trusted);
   if (fields.nationality) fillField('f-nationality', fields.nationality, trusted);
   if (fields.passportNo) fillField('f-passportno', fields.passportNo, passportTrust);
@@ -308,11 +351,13 @@ function applyExtractedFields(fields, trusted, checks) {
     fillField('f-dob', fields.dob, dobTrust);
     fillField('f-age', calcAge(fields.dob), dobTrust);
   }
-  if (fields.expiry) fillField('f-expirydate', fields.expiry, expiryTrust);
+  if (fields.expiry) fillField('f-expirydate', fields.expiry, expiryTrust && !computedExpiry,
+    computedExpiry ? 'Computed from the date of issue (10 years minus a day) — please verify.' : undefined);
   // Issue date and place of issue aren't in the MRZ — they live in the
   // visual inspection zone, which OCR is much less reliable at, so we
   // only ever suggest these (never mark them "trusted").
-  if (fields.issueDate) fillField('f-issuedate', fields.issueDate, false);
+  if (fields.issueDate) fillField('f-issuedate', fields.issueDate, !computedIssue,
+    computedIssue ? 'Computed from the date of expiry (10 years minus a day) — please verify.' : undefined);
   if (fields.issuePlace) fillField('f-issueplace', fields.issuePlace, false);
 }
 
@@ -345,19 +390,15 @@ const FIELD_MAP = {
   'f-salary': 'pv-salary',
   'f-contract': 'pv-contract',
   'f-passportno': 'pv-passportno',
-  'f-issuedate': 'pv-issuedate',
   'f-issueplace': 'pv-issueplace',
-  'f-expirydate': 'pv-expirydate',
   'f-nationality': 'pv-nationality',
   'f-religion': 'pv-religion',
-  'f-dob': 'pv-dob',
   'f-age': 'pv-age',
   'f-pob': 'pv-pob',
   'f-contact': 'pv-contact',
   'f-marital': 'pv-marital',
   'f-children': 'pv-children',
   'f-weight': 'pv-weight',
-  'f-height': 'pv-height',
   'f-education': 'pv-education',
   'f-english': 'pv-english',
   'f-arabic': 'pv-arabic',
@@ -366,6 +407,13 @@ const FIELD_MAP = {
   'f-prevpost': 'pv-prevpost',
   'f-remarks': 'pv-remarks',
   'f-skills': 'pv-skills'
+};
+// Date-picker fields need converting from their native ISO value
+// (YYYY-MM-DD) to the DD/MM/YYYY format the CV template displays.
+const DATE_FIELD_MAP = {
+  'f-dob': 'pv-dob',
+  'f-issuedate': 'pv-issuedate',
+  'f-expirydate': 'pv-expirydate'
 };
 
 Object.entries(FIELD_MAP).forEach(([inputId, previewId]) => {
@@ -377,6 +425,32 @@ Object.entries(FIELD_MAP).forEach(([inputId, previewId]) => {
   input.addEventListener('change', sync);
   sync();
 });
+
+Object.entries(DATE_FIELD_MAP).forEach(([inputId, previewId]) => {
+  const input = $(inputId);
+  const preview = $(previewId);
+  if (!input || !preview) return;
+  const sync = () => { preview.textContent = isoToDisplay(input.value) || '\u00A0'; };
+  input.addEventListener('input', sync);
+  input.addEventListener('change', sync);
+  sync();
+});
+
+// Height is entered as two number inputs (feet / inches) but shown in the CV
+// as a single value, e.g. 5 ft 8 in -> "5.80" — matching the format already
+// used on the real template (confirmed against a real passport: 5'8" -> 5.80).
+function syncHeight() {
+  const ft = $('f-height-ft').value;
+  const inches = $('f-height-in').value;
+  const preview = $('pv-height');
+  if (ft === '' && inches === '') { preview.textContent = '\u00A0'; return; }
+  const inchNum = inches === '' ? 0 : parseInt(inches, 10);
+  const inchStr = inchNum < 10 ? `${inchNum}0` : `${inchNum}`;
+  preview.textContent = `${ft || 0}.${inchStr}`;
+}
+$('f-height-ft').addEventListener('input', syncHeight);
+$('f-height-in').addEventListener('input', syncHeight);
+syncHeight();
 
 function syncCheckbox(inputId, previewId) {
   const input = $(inputId);
@@ -404,9 +478,17 @@ async function generatePdf() {
   btn.disabled = true;
   setStatus(genStatus, 'Building PDF…', 'info');
 
+  // html2canvas needs the element to actually be laid out in the document —
+  // a detached node (never appended anywhere) renders blank. So we clone the
+  // preview into an off-screen container that IS attached to the page,
+  // wait for every image inside it to finish loading, then snapshot it.
   const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  wrapper.style.top = '0';
+  wrapper.style.left = '-99999px';
   wrapper.appendChild($('cvPage1').cloneNode(true));
   wrapper.appendChild($('cvPage2').cloneNode(true));
+  document.body.appendChild(wrapper);
 
   const fileName = `${safeFileName($('f-fullname').value)}_CV.pdf`;
 
@@ -420,6 +502,7 @@ async function generatePdf() {
   };
 
   try {
+    await waitForImages(wrapper);
     const worker = html2pdf().set(opt).from(wrapper);
     const pdfBlob = await worker.outputPdf('blob');
     if (lastPdfBlobUrl) URL.revokeObjectURL(lastPdfBlobUrl);
@@ -435,7 +518,20 @@ async function generatePdf() {
     setStatus(genStatus, 'Something went wrong generating the PDF. Please try again.', 'error');
   } finally {
     btn.disabled = false;
+    wrapper.remove();
   }
+}
+
+function waitForImages(container) {
+  const imgs = Array.from(container.querySelectorAll('img'));
+  return Promise.all(imgs.map(img => {
+    if (!img.src) return Promise.resolve();
+    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+    return new Promise(resolve => {
+      img.addEventListener('load', resolve, { once: true });
+      img.addEventListener('error', resolve, { once: true });
+    });
+  }));
 }
 
 function triggerDownload(blobUrl, fileName) {
