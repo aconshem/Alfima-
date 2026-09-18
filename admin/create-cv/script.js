@@ -55,26 +55,21 @@ function cleanMrzLine(line) {
 }
 
 // Find two adjacent ~44-char MRZ-looking lines anywhere in a block of OCR text.
+function normalizeMrzOcrLine(line) {
+  return line.toUpperCase().replace(/[«»]/g, '<').replace(/[^A-Z0-9<]/g, '').trim();
+}
+
 function findMrzLines(rawText) {
-  const lines = rawText.split('\n').map(cleanMrzLine).filter(l => l.length >= 30);
+  const lines = rawText.split(/\r?\n/).map(normalizeMrzOcrLine).filter(l => l.length >= 28);
+  const candidates = [];
   for (let i = 0; i < lines.length - 1; i++) {
-    let l1 = lines[i], l2 = lines[i + 1];
-    // Pad or trim to 44 — OCR often drops/adds a trailing '<'
-    l1 = (l1 + '<'.repeat(44)).slice(0, 44);
-    l2 = (l2 + '<'.repeat(44)).slice(0, 44);
-    if (l1.startsWith('P<') || l1.startsWith('P0') || /^P[A-Z<]/.test(l1)) {
-      return [l1, l2];
-    }
+    const a = lines[i], b = lines[i + 1];
+    const score = (a.startsWith('P<') ? 40 : 0) + Math.min(a.length,44) + Math.min(b.length,44) + (a.includes('<') ? 10 : 0) + (b.includes('<') ? 10 : 0);
+    if (a.length >= 38 && b.length >= 38) candidates.push([a,b,score]);
   }
-  // Fallback: just take the two longest lines if nothing starts with P<
-  const sorted = [...lines].sort((a, b) => b.length - a.length);
-  if (sorted.length >= 2 && sorted[0].length >= 40 && sorted[1].length >= 40) {
-    return [
-      (sorted[0] + '<'.repeat(44)).slice(0, 44),
-      (sorted[1] + '<'.repeat(44)).slice(0, 44)
-    ];
-  }
-  return null;
+  candidates.sort((a,b) => b[2]-a[2]);
+  if (!candidates.length) return null;
+  return candidates[0].slice(0,2).map(l => (l + '<'.repeat(44)).slice(0,44));
 }
 
 function parseMRZ(rawText) {
@@ -127,13 +122,38 @@ function parseMRZ(rawText) {
    2. OCR FALLBACK — full-page Tesseract OCR + heuristic field matching
    Used when the MRZ can't be found or its checksums don't validate.
 ===================================================================== */
-async function runFullOcr(imageDataUrl, onProgress) {
-  const result = await Tesseract.recognize(imageDataUrl, 'eng', {
-    logger: (m) => {
-      if (m.status === 'recognizing text' && onProgress) onProgress(m.progress);
-    }
+function preprocessPassportImage(dataUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.max(1, Math.min(2.5, 2400 / Math.max(img.width, img.height)));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale); canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext('2d', {willReadFrequently:true});
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      const d=ctx.getImageData(0,0,canvas.width,canvas.height);
+      for(let i=0;i<d.data.length;i+=4){ const g=.299*d.data[i]+.587*d.data[i+1]+.114*d.data[i+2]; const v=Math.max(0,Math.min(255,(g-128)*1.5+128)); d.data[i]=d.data[i+1]=d.data[i+2]=v; }
+      ctx.putImageData(d,0,0); resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror=reject; img.src=dataUrl;
   });
-  return result.data;
+}
+
+async function runOcrPass(imageDataUrl, onProgress) {
+  return Tesseract.recognize(imageDataUrl, 'eng', {
+    logger:(m)=>{ if(m.status==='recognizing text' && onProgress) onProgress(m.progress); },
+    tessedit_pageseg_mode:6, preserve_interword_spaces:1
+  });
+}
+
+async function runFullOcr(imageDataUrl,onProgress){ return (await runOcrPass(await preprocessPassportImage(imageDataUrl),onProgress)).data; }
+
+async function runMrzOcr(imageDataUrl){
+  const img=new Image();
+  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=imageDataUrl;});
+  const c=document.createElement('canvas'); c.width=img.width; c.height=Math.round(img.height*.42);
+  c.getContext('2d').drawImage(img,0,Math.round(img.height*.58),img.width,Math.round(img.height*.42),0,0,c.width,c.height);
+  return runOcrPass(await preprocessPassportImage(c.toDataURL('image/png')),()=>{});
 }
 
 const DATE_PATTERN = '(\\d{1,2}\\s?[A-Z]{3}\\s?\\d{4}|\\d{2}\\/\\d{2}\\/\\d{4})';
@@ -177,6 +197,12 @@ function heuristicExtract(ocrText) {
   const issuePlaceMatch = text.match(/Issuing\s*Authority[\/:\s]*([A-Z][A-Z\s]{1,39})(?=[\n\r]|$)/i)
                         || text.match(/Place\s*of\s*Issue[\/:\s]*([A-Z][A-Z\s]{1,39})(?=[\n\r]|$)/i);
   if (issuePlaceMatch) out.issuePlace = issuePlaceMatch[1].trim();
+
+  const pobMatch = text.match(/(?:Place\s*of\s*Birth|Birth\s*Place)[\/:\s]*([^\n\r]{2,60})/i);
+  if (pobMatch) out.pob = pobMatch[1].replace(/\s{2,}/g,' ').trim();
+
+  const heightMatch = text.match(/\bHeight[\/:\s]*([0-9]{1,2})\s*(?:ft|feet|')[,\s-]*([0-9]{1,2})?\s*(?:in|inches|")?/i);
+  if (heightMatch) { out.heightFt = heightMatch[1]; out.heightIn = heightMatch[2] || '0'; }
 
   return out;
 }
@@ -297,22 +323,21 @@ $('passportInput').addEventListener('change', async (e) => {
     setStatus(ocrStatus, 'Reading passport — trying the machine-readable zone first…', 'info');
 
     try {
-      const ocrData = await runFullOcr(dataUrl, (p) => {
-        ocrProgressFill.style.width = `${Math.round(p * 100)}%`;
-      });
-
-      const mrz = parseMRZ(ocrData.text);
+      const mrzData = await runMrzOcr(dataUrl);
+      const mrz = parseMRZ(mrzData.data.text);
+      const ocrData = await runFullOcr(dataUrl, (p) => { ocrProgressFill.style.width = `${Math.round(p * 100)}%`; });
+      const heuristic = heuristicExtract(ocrData.text);
+      const combined = { ...heuristic, ...(mrz.success ? mrz.fields : {}) };
 
       if (mrz.success && mrz.trusted) {
-        setStatus(ocrStatus, 'Machine-readable zone read successfully.', 'success');
-        applyExtractedFields(mrz.fields, true, mrz.checks);
+        setStatus(ocrStatus, 'MRZ read successfully; visual passport fields also checked by OCR.', 'success');
+        applyExtractedFields(combined, true, mrz.checks);
       } else if (mrz.success) {
-        setStatus(ocrStatus, 'MRZ found but checksums looked off — fields filled in, please verify.', 'error');
-        applyExtractedFields(mrz.fields, false, mrz.checks);
+        setStatus(ocrStatus, 'MRZ found but some checksums looked off — fields filled in, please verify.', 'error');
+        applyExtractedFields(combined, false, mrz.checks);
       } else {
-        setStatus(ocrStatus, 'No reliable MRZ detected — falling back to general OCR. Please verify all fields.', 'error');
-        const heuristic = heuristicExtract(ocrData.text);
-        applyExtractedFields(heuristic, false);
+        setStatus(ocrStatus, 'MRZ could not be verified — full-page OCR filled what it could. Please review highlighted fields.', 'error');
+        applyExtractedFields(combined, false);
       }
     } catch (err) {
       setStatus(ocrStatus, 'Could not read the passport automatically. Please fill in the fields manually.', 'error');
@@ -322,6 +347,17 @@ $('passportInput').addEventListener('change', async (e) => {
     }
   };
   reader.readAsDataURL(file);
+});
+
+// Passport drag-and-drop support. Keep click-to-browse as a fallback.
+const passportUploadBox = $('passportUploadBox');
+['dragenter','dragover'].forEach(type => passportUploadBox.addEventListener(type, e => { e.preventDefault(); passportUploadBox.classList.add('drag-over'); }));
+['dragleave','drop'].forEach(type => passportUploadBox.addEventListener(type, e => { e.preventDefault(); passportUploadBox.classList.remove('drag-over'); }));
+passportUploadBox.addEventListener('drop', e => {
+  const file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const dt = new DataTransfer(); dt.items.add(file); $('passportInput').files = dt.files;
+  $('passportInput').dispatchEvent(new Event('change', {bubbles:true}));
 });
 
 function applyExtractedFields(fields, trusted, checks) {
@@ -359,6 +395,8 @@ function applyExtractedFields(fields, trusted, checks) {
   if (fields.issueDate) fillField('f-issuedate', fields.issueDate, !computedIssue,
     computedIssue ? 'Computed from the date of expiry (10 years minus a day) — please verify.' : undefined);
   if (fields.issuePlace) fillField('f-issueplace', fields.issuePlace, false);
+  if (fields.pob) fillField('f-pob', fields.pob, false);
+  if (fields.heightFt) { $('f-height-ft').value = fields.heightFt; $('f-height-in').value = fields.heightIn || '0'; syncHeight(); markField('f-height-ft', false); markField('f-height-in', false); }
 }
 
 /* =====================================================================
@@ -440,13 +478,10 @@ Object.entries(DATE_FIELD_MAP).forEach(([inputId, previewId]) => {
 // as a single value, e.g. 5 ft 8 in -> "5.80" — matching the format already
 // used on the real template (confirmed against a real passport: 5'8" -> 5.80).
 function syncHeight() {
-  const ft = $('f-height-ft').value;
-  const inches = $('f-height-in').value;
+  const ft = $('f-height-ft').value, inches = $('f-height-in').value;
   const preview = $('pv-height');
   if (ft === '' && inches === '') { preview.textContent = '\u00A0'; return; }
-  const inchNum = inches === '' ? 0 : parseInt(inches, 10);
-  const inchStr = inchNum < 10 ? `${inchNum}0` : `${inchNum}`;
-  preview.textContent = `${ft || 0}.${inchStr}`;
+  preview.textContent = `${ft || 0}'${inches || 0}"`;
 }
 $('f-height-ft').addEventListener('input', syncHeight);
 $('f-height-in').addEventListener('input', syncHeight);
@@ -464,95 +499,57 @@ syncCheckbox('f-chk-cleaning', 'chk-cleaning');
 syncCheckbox('f-chk-cooking', 'chk-cooking');
 
 /* =====================================================================
-   6. GENERATE PDF
+   5B. PREVIOUS EMPLOYMENT — repeatable country/period/post rows
 ===================================================================== */
-let lastPdfBlobUrl = null;
-
-function safeFileName(name) {
-  return (name || 'CV').trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '') || 'CV';
+const previousJobs = [];
+const previousEmploymentFields = $('previousEmploymentFields');
+const countryOptions = ['Saudi Arabia','Qatar','Bahrain','Iraq','Dubai'];
+function renderPreviousJobs() {
+  previousEmploymentFields.innerHTML = '';
+  previousJobs.forEach((job, i) => {
+    const wrap = document.createElement('div'); wrap.className='previous-job';
+    wrap.innerHTML = `<div class="previous-job-head"><strong>Employment ${i+1}</strong>${previousJobs.length>1?'<button type="button" class="remove-job">Remove</button>':''}</div>
+      <div class="field"><label>Country</label><select class="prev-country"><option value="">Select country</option>${countryOptions.map(c=>`<option ${job.country===c?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="field-row"><div class="field"><label>Period</label><input class="prev-period" type="text" value="${job.period||''}" placeholder="e.g. 2019–2022"></div><div class="field"><label>Post</label><input class="prev-post" type="text" value="${job.post||'MAID'}"></div></div>`;
+    wrap.querySelector('.prev-country').addEventListener('change',e=>{job.country=e.target.value; syncPreviousPreview();});
+    wrap.querySelector('.prev-period').addEventListener('input',e=>{job.period=e.target.value; syncPreviousPreview();});
+    wrap.querySelector('.prev-post').addEventListener('input',e=>{job.post=e.target.value; syncPreviousPreview();});
+    const remove=wrap.querySelector('.remove-job'); if(remove) remove.addEventListener('click',()=>{previousJobs.splice(i,1);renderPreviousJobs();syncPreviousPreview();});
+    previousEmploymentFields.appendChild(wrap);
+  });
 }
-
-async function generatePdf() {
-  const genStatus = $('genStatus');
-  const btn = $('generateBtn');
-  btn.disabled = true;
-  setStatus(genStatus, 'Building PDF…', 'info');
-
-  // html2canvas needs the element to actually be laid out in the document —
-  // a detached node (never appended anywhere) renders blank. So we clone the
-  // preview into an off-screen container that IS attached to the page,
-  // wait for every image inside it to finish loading, then snapshot it.
-  const wrapper = document.createElement('div');
-  wrapper.style.position = 'fixed';
-  wrapper.style.top = '0';
-  wrapper.style.left = '-99999px';
-  wrapper.appendChild($('cvPage1').cloneNode(true));
-  wrapper.appendChild($('cvPage2').cloneNode(true));
-  document.body.appendChild(wrapper);
-
-  const fileName = `${safeFileName($('f-fullname').value)}_CV.pdf`;
-
-  const opt = {
-    margin: 0,
-    filename: fileName,
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css'] }
-  };
-
-  try {
-    await waitForImages(wrapper);
-    const worker = html2pdf().set(opt).from(wrapper);
-    const pdfBlob = await worker.outputPdf('blob');
-    if (lastPdfBlobUrl) URL.revokeObjectURL(lastPdfBlobUrl);
-    lastPdfBlobUrl = URL.createObjectURL(pdfBlob);
-
-    triggerDownload(lastPdfBlobUrl, fileName);
-    setStatus(genStatus, 'PDF generated and download started.', 'success');
-    $('downloadAgainBtn').style.display = 'block';
-
-    logCvGeneration($('f-fullname').value);
-  } catch (err) {
-    console.error(err);
-    setStatus(genStatus, 'Something went wrong generating the PDF. Please try again.', 'error');
-  } finally {
-    btn.disabled = false;
-    wrapper.remove();
+function syncPreviousPreview(){
+  const rows=previousJobs.filter(j=>j.country||j.period||j.post);
+  const table=$('pv-prevcountry').closest('table');
+  table.querySelectorAll('tr.prev-job-preview').forEach(r=>r.remove());
+  const tbody=table.tBodies[0];
+  if(rows.length){
+    rows.forEach(j=>{ const tr=document.createElement('tr'); tr.className='prev-job-preview'; tr.innerHTML=`<td>${j.country||'NULL'}</td><td>${j.period||'NULL'}</td><td>${j.post||'MAID'}</td>`; tbody.appendChild(tr); });
+  } else {
+    const tr=document.createElement('tr'); tr.className='prev-job-preview'; tr.innerHTML='<td>NULL</td><td>NULL</td><td>MAID</td>'; tbody.appendChild(tr);
   }
 }
+previousJobs.push({country:'',period:'',post:'MAID'}); renderPreviousJobs();
+$('addPreviousEmploymentBtn').addEventListener('click',()=>{previousJobs.push({country:'',period:'',post:'MAID'});renderPreviousJobs();});
 
-function waitForImages(container) {
-  const imgs = Array.from(container.querySelectorAll('img'));
-  return Promise.all(imgs.map(img => {
-    if (!img.src) return Promise.resolve();
-    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
-    return new Promise(resolve => {
-      img.addEventListener('load', resolve, { once: true });
-      img.addEventListener('error', resolve, { once: true });
-    });
-  }));
+/* =====================================================================
+   6. GENERATE PDF — browser print dialog
+===================================================================== */
+function safeFileName(name) { return (name || 'CV').trim().replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'') || 'CV'; }
+function generatePdf() {
+  const genStatus=$('genStatus'), btn=$('generateBtn'); btn.disabled=true;
+  setStatus(genStatus,'Opening Chrome print dialog — choose “Save to PDF” when ready.','info');
+  const printWindow=window.open('','_blank');
+  if(!printWindow){setStatus(genStatus,'Chrome blocked the print window. Please allow pop-ups for this page.','error');btn.disabled=false;return;}
+  const pages=[$('cvPage1'),$('cvPage2')].map(e=>e.outerHTML).join('\n');
+  const css=Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l=>`<link rel="stylesheet" href="${l.href}">`).join('');
+  printWindow.document.open();
+  printWindow.document.write(`<!doctype html><html><head><meta charset="UTF-8"><title>${safeFileName($('f-fullname').value)}_CV</title>${css}<style>@page{size:A4 portrait;margin:0}html,body{margin:0!important;padding:0!important;background:#fff!important}.cv-page{box-shadow:none!important;margin:0!important}.cv-page2{page-break-before:always!important;break-before:page!important}</style></head><body>${pages}</body></html>`);
+  printWindow.document.close();
+  const imgs=Array.from(printWindow.document.images);
+  Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true});}))).then(()=>{setTimeout(()=>{printWindow.focus();printWindow.print();},300);logCvGeneration($('f-fullname').value);btn.disabled=false;});
 }
-
-function triggerDownload(blobUrl, fileName) {
-  try {
-    const a = document.createElement('a');
-    a.href = blobUrl;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  } catch (err) {
-    console.error('Auto-download blocked, use the Download Again button.', err);
-  }
-}
-
-$('generateBtn').addEventListener('click', generatePdf);
-$('downloadAgainBtn').addEventListener('click', () => {
-  if (lastPdfBlobUrl) {
-    triggerDownload(lastPdfBlobUrl, `${safeFileName($('f-fullname').value)}_CV.pdf`);
-  }
-});
+$('generateBtn').addEventListener('click',generatePdf);
 
 /* =====================================================================
    7. ACTIVITY LOG — record every CV generated, by whom, when

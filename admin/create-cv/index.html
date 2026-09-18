@@ -10,7 +10,7 @@
 <!-- OCR (fallback path) -->
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <!-- HTML -> PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 </head>
 <body>
 
@@ -22,13 +22,13 @@
 <div class="builder-layout">
 
   <!-- ===================== LEFT: FORM ===================== -->
-  <div>
+  <div class="form-scroll">
 
     <div class="panel">
       <h2>1. Upload Passport</h2>
       <label class="upload-box" id="passportUploadBox">
         <input type="file" id="passportInput" accept="image/*">
-        <span id="passportUploadLabel">Click to upload a passport photo or scan (JPG/PNG)</span>
+        <span id="passportUploadLabel">Drag &amp; drop a passport photo/scan here, or click to browse (JPG/PNG)</span>
         <img id="passportPreviewImg" class="upload-preview" style="display:none">
       </label>
       <div id="ocrStatus" class="status-msg status-info" style="display:none"></div>
@@ -83,7 +83,7 @@
       </div>
       <div class="field"><label>Place of Issue</label><input type="text" id="f-issueplace"></div>
 
-      <h3>Not on the passport — type manually</h3>
+      <h3>Passport / Personal Details</h3>
       <div class="field"><label>Place of Birth</label><input type="text" id="f-pob"></div>
       <div class="field"><label>Contact / Phone Number</label><input type="text" id="f-contact"></div>
       <div class="field-row">
@@ -102,6 +102,7 @@
             <input type="number" id="f-height-ft" placeholder="Feet" min="0" max="8">
             <input type="number" id="f-height-in" placeholder="Inches" min="0" max="11">
           </div>
+          <div class="field-hint">Displayed as 5'8&quot; (not 5.80)</div>
         </div>
       </div>
     </div>
@@ -120,11 +121,8 @@
 
     <div class="panel">
       <h2>5. Previous Employment Abroad</h2>
-      <div class="field"><label>Country</label><input type="text" id="f-prevcountry" value="NULL"></div>
-      <div class="field-row">
-        <div class="field"><label>Period</label><input type="text" id="f-prevperiod" value="NULL"></div>
-        <div class="field"><label>Post</label><input type="text" id="f-prevpost" value="MAID"></div>
-      </div>
+      <div id="previousEmploymentFields"></div>
+      <button type="button" class="btn btn-dark btn-block" id="addPreviousEmploymentBtn">+ Add another country</button>
     </div>
 
     <div class="panel">
@@ -144,7 +142,6 @@
     <div class="panel">
       <button class="btn btn-primary btn-block" id="generateBtn">Generate PDF</button>
       <div id="genStatus" class="status-msg" style="display:none"></div>
-      <button class="btn btn-dark btn-block" id="downloadAgainBtn" style="display:none;margin-top:10px;">Download Again</button>
     </div>
 
   </div>
