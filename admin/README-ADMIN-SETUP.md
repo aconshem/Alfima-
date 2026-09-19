@@ -66,27 +66,46 @@ this live, so changes appear right away.
 
 ## Create CV
 
-There's also a **Create CV** page (linked from the top of the dashboard)
-for generating the official FRST National application-for-employment PDF
-for one candidate at a time. It runs entirely in the browser — no server
-involved except to check you're logged in.
+There's a **Create CV** page (linked from the top of the dashboard) for
+generating application-for-employment PDFs, one candidate at a time. It
+runs entirely in the browser — no server involved except to check you're
+logged in and to record the activity log entry.
 
-How it works:
-1. Upload a passport photo/scan. The page first tries to read the
-   Machine Readable Zone (the two lines of text at the bottom of the photo
-   page) and checksum-validates it — this is the most reliable path.
-2. If that fails, it automatically falls back to full-page OCR and pulls
-   out what it can with pattern matching.
-3. Every autofilled field stays fully editable. Anything the extraction
+Clicking "Create CV" opens a **template picker** first, not the editor
+directly — this is because more templates are planned. Right now there's
+one: **Template 1** (the FRST National bilingual English/Arabic form).
+Adding a new template later means dropping a new folder in
+`admin/create-cv/template-2/` (etc.) with its own `index.html`/`script.js`/
+`styles.css`, and adding a card for it on the picker page — the existing
+templates are unaffected.
+
+How Template 1 works:
+1. Upload a passport photo/scan (click, or drag-and-drop). The page tries
+   to read the Machine Readable Zone (the two lines of text at the bottom
+   of the photo page) and checksum-validates it — the most reliable path
+   — while a second OCR pass reads the rest of the visible page for
+   details like place of birth and height.
+2. Every autofilled field stays fully editable. Anything the extraction
    wasn't confident about is highlighted in amber — always double-check
    those before generating.
-4. Upload a headshot and a full-body photo, fill in everything the
+3. Upload a headshot and a full-body photo, fill in everything the
    passport can't tell you (phone number, position, salary, religion,
-   marital status, etc.), and the live preview on the right updates as
-   you type.
-5. **Generate PDF** downloads the finished two-page CV (the form itself,
-   then the passport scan as page 2) and logs the action — who generated
-   a CV for which candidate, and when — to the Activity Log.
+   marital status, etc.), add one row per country under Previous
+   Employment Abroad if needed, and the live preview on the right updates
+   as you type.
+4. **Generate PDF** builds the finished two-page CV (the form itself,
+   then the passport scan as page 2) and downloads it automatically —
+   a "Download Again" button appears afterward in case the browser
+   blocks or misplaces the first download. It also logs who generated a
+   CV for which candidate, and when, to the Activity Log.
+
+Note on PDF quality: this generates the PDF by rendering the page as an
+image (via html2pdf.js), which keeps everything automatic but means the
+text isn't selectable/searchable in the PDF like a native document would
+be. If that ever becomes a problem, the alternative is a "Print / Save as
+PDF" flow using the browser's own print dialog, which produces a sharper,
+text-based PDF at the cost of one extra manual click — happy to add that
+as a second option if useful.
 
 The visual template (fonts, borders, bilingual Arabic labels, the blue/
 orange side bar, photo placement) is built to match the official Word
