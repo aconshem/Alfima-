@@ -71,47 +71,51 @@ generating application-for-employment PDFs, one candidate at a time. It
 runs entirely in the browser — no server involved except to check you're
 logged in and to record the activity log entry.
 
-Clicking "Create CV" opens a **template picker** first, not the editor
-directly — this is because more templates are planned. Right now there's
-one: **Template 1** (the FRST National bilingual English/Arabic form).
-Adding a new template later means dropping a new folder in
-`admin/create-cv/template-2/` (etc.) with its own `index.html`/`script.js`/
-`styles.css`, and adding a card for it on the picker page — the existing
-templates are unaffected.
+Clicking "Create CV" opens a **template picker** first. Two templates are
+available:
 
-How Template 1 works:
-1. Upload a passport photo/scan (click, or drag-and-drop). The page tries
-   to read the Machine Readable Zone (the two lines of text at the bottom
-   of the photo page) and checksum-validates it — the most reliable path
-   — while a second OCR pass reads the rest of the visible page for
-   details like place of birth and height.
-2. Every autofilled field stays fully editable. Anything the extraction
-   wasn't confident about is highlighted in amber — always double-check
-   those before generating.
-3. Upload a headshot and a full-body photo, fill in everything the
-   passport can't tell you (phone number, position, salary, religion,
-   marital status, etc.), add one row per country under Previous
-   Employment Abroad if needed, and the live preview on the right updates
-   as you type.
-4. **Generate PDF** builds the finished two-page CV (the form itself,
-   then the passport scan as page 2) and downloads it automatically —
-   a "Download Again" button appears afterward in case the browser
-   blocks or misplaces the first download. It also logs who generated a
-   CV for which candidate, and when, to the Activity Log.
+- **Template 1 — FRST National** (A4, bilingual English/Arabic).
+- **Template 2 — One Stop Recruitment Agency** (US Letter).
 
-Note on PDF quality: this generates the PDF by rendering the page as an
-image (via html2pdf.js), which keeps everything automatic but means the
-text isn't selectable/searchable in the PDF like a native document would
-be. If that ever becomes a problem, the alternative is a "Print / Save as
-PDF" flow using the browser's own print dialog, which produces a sharper,
-text-based PDF at the cost of one extra manual click — happy to add that
-as a second option if useful.
+Each template is its own folder (`admin/create-cv/template-1/`, `template-2/`)
+containing `index.html` (form + the printable pages), `template.css` (the
+page design), `script.js` (which form field feeds which placeholder) and
+`img/logo.jpg` (the fixed logo). Passport reading, autofill, live preview
+and printing live once in `admin/create-cv/shared/` (`cv-core.js`,
+`builder.css`). To add Template 3, copy a template folder, swap in the new
+design, give each changing text a `pv-*` id, map it in `script.js`, and add
+a card on the picker page.
 
-The visual template (fonts, borders, bilingual Arabic labels, the blue/
-orange side bar, photo placement) is built to match the official Word
-template as closely as possible. The Arabic labels are reproduced exactly
-as they appear in that template, right-aligned — nothing was reworded or
-re-centered.
+Placeholders: every value that changes per candidate is an element with an
+id starting `pv-` (e.g. `pv-fullname`, `pv-passportno`); photos are
+`pv-headshot`, `pv-fullbody` and `pv-passportscan` (page 2). Everything
+else — headings, Arabic text, lines, the logo — is fixed.
+
+How it works:
+1. Upload a passport photo/scan (click, or drag-and-drop). The page reads
+   the Machine Readable Zone first (checksum-validated) and also OCRs the
+   visible page for details like place of birth and height.
+2. Every autofilled field stays editable. Amber fields were not read with
+   full confidence — double-check them.
+3. Upload the photo(s), fill in the rest, add previous-employment
+   countries if needed. The live preview on the right updates as you type;
+   the form (left) and the preview (right) scroll independently.
+4. **Generate PDF** — or **Ctrl+P** (Cmd+P on Mac) — opens the browser's
+   print dialog showing only the CV pages. Choose **Save as PDF**. Nothing
+   downloads automatically. The suggested file name is the candidate's
+   name. Each print is recorded in the Activity Log (who, which candidate,
+   which template, when).
+
+Because the PDF comes from the browser's print engine, the text stays
+sharp and selectable. If the dialog shows headers/footers or margins,
+set Margins to "None" and untick "Headers and footers" (the page already
+requests zero margins, which Chrome and Edge honour).
+
+Template 1 has room for two rows of previous employment; Template 2 joins
+several countries/periods with commas in its single Country and Period
+cells. Template 2's first work-experience box has no label in the supplied
+template, so the form lets you type one (leave empty to match the
+template).
 
 ## Notes
 
