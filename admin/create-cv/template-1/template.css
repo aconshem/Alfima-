@@ -1,0 +1,27 @@
+/* FRST NATIONAL – APPLICATION FOR EMPLOYMENT (A4, absolute-positioned). Placeholders are the pv-* ids in index.html */
+  @page { size: 595.3pt 841.9pt; margin: 0; }
+  .page, .page * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .page { font-family: Arial, "Liberation Sans", Helvetica, sans-serif; color: #000; position: relative; width: 595.3pt; height: 841.9pt; background: #fff; overflow: hidden;
+          margin: 12px auto; box-shadow: 0 0 8px rgba(0,0,0,.5); }
+
+  /* every text is placed absolutely at its original position */
+  .page .t  { position: absolute; white-space: nowrap; line-height: 1; margin: 0; font-weight: normal; }
+  .page .t.b, .page .b { font-weight: bold; }
+  .page .ar { position: absolute; white-space: nowrap; line-height: 1; font-weight: bold; color: #548DD4;
+        font-family: "Times New Roman", "Traditional Arabic", FreeSerif, "Noto Naskh Arabic", "Segoe UI", serif; }
+  .page .or { color: #E36C09; }                       /* orange values (position / salary / contract) */
+  .page .ln { position: absolute; display: block; background: #000; }          /* table lines */
+  .page .abs { position: absolute; display: block; }
+  .page .para { position: absolute; margin: 0; font-weight: bold; color: #211F1F; font-size: 12pt; }
+  .page .chk { position: absolute; width: 15pt; height: 15pt; }
+
+  @media print {
+    .page.p1 { break-after: page; page-break-after: always; }
+    .page.p2 { height: 841pt; }
+  }
+
+  .page img.abs { object-fit: cover; }
+  .page img.abs.scan { object-fit: contain; }
+  .page .pvj { position:absolute; white-space:nowrap; line-height:1; font-weight:bold; font-size:11pt; }

@@ -3,19 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Create CV — Template 1 — Al Fima Agency Admin</title>
+<title>Create CV — Template 1 (FRST National) — Al Fima Agency Admin</title>
 <link rel="icon" type="image/png" href="../../../assets/images/favicon-32.png">
-<link rel="stylesheet" href="styles.css">
-
-<!-- OCR -->
+<link rel="stylesheet" href="../shared/builder.css">
+<link rel="stylesheet" href="template.css">
+<!-- OCR (passport reading) -->
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<!-- HTML -> PDF (automatic download) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-title">Create CV — Template 1</div>
+  <div class="topbar-title">Create CV — Template 1 · FRST National</div>
   <a href="../index.html">&larr; Back to Templates</a>
 </div>
 
@@ -123,6 +121,7 @@
     <div class="panel">
       <h2>5. Previous Employment Abroad</h2>
       <div id="previousEmploymentFields"></div>
+      <div id="prevLimitNote" class="field-hint" style="display:none;margin-bottom:8px">Template 1 has room for 2 rows of previous employment.</div>
       <button type="button" class="btn btn-dark btn-block" id="addPreviousEmploymentBtn">+ Add another country</button>
     </div>
 
@@ -131,7 +130,7 @@
       <div class="checkbox-row"><input type="checkbox" id="f-chk-housekeeping" checked><label for="f-chk-housekeeping">House Keeping</label></div>
       <div class="checkbox-row"><input type="checkbox" id="f-chk-cleaning" checked><label for="f-chk-cleaning">Cleaning</label></div>
       <div class="checkbox-row"><input type="checkbox" id="f-chk-cooking" checked><label for="f-chk-cooking">Cooking</label></div>
-      <p style="font-size:11.5px;color:#6b7280;">Washing and Baby Sitting are shown automatically next to House Keeping and Cleaning, matching the original template — they don't have their own checkbox on the official form.</p>
+      <p class="hint-box">Washing and Baby Sitting always print next to House Keeping and Cleaning, exactly as in the template.</p>
     </div>
 
     <div class="panel">
@@ -143,120 +142,217 @@
     <div class="panel">
       <button class="btn btn-primary btn-block" id="generateBtn">Generate PDF</button>
       <div id="genStatus" class="status-msg" style="display:none"></div>
-      <button class="btn btn-dark btn-block" id="downloadAgainBtn" style="display:none;margin-top:10px;">Download Again</button>
+      <p class="hint-box">Opens your browser&rsquo;s print dialog &mdash; choose <strong>Save as PDF</strong>. <kbd>Ctrl</kbd>+<kbd>P</kbd> (<kbd>&#8984;</kbd>+<kbd>P</kbd> on Mac) does the same. The file name is suggested from the candidate&rsquo;s name.</p>
     </div>
 
   </div>
 
-  <!-- ===================== RIGHT: LIVE PREVIEW ===================== -->
+  <!-- ===================== RIGHT: LIVE PREVIEW (this is what prints) ===================== -->
   <div class="preview-scroll">
+<!-- ===================================================== PAGE 1 ===================================================== -->
+<section class="page p1">
 
-    <div class="cv-page" id="cvPage1">
-      <img class="cv-header-logo" src="assets/logo.jpg" alt="">
-      <div class="cv-title">APPLICATION FOR EMPLOYMENT &nbsp; <span class="ar">إستمارة توظيف</span></div>
+  <!-- ===== LEFT SIDE STRIP ===== -->
+  <i class="abs" style="left:39.38pt;top:90.18pt;width:18.95pt;height:358.35pt;background:#4F81BC"></i>
+  <i class="abs" style="left:41.43pt;top:92.23pt;width:14.85pt;height:353.25pt;background:#006FC0"></i>
+  <i class="abs" style="left:41pt;top:412.5pt;width:15.9pt;height:355.2pt;background:#E36C09"></i>
+  <!-- ===== LOGO BOX ===== -->
+  <i class="abs" style="left:32.75pt;top:5.75pt;width:206pt;height:64.2pt;border:.5pt solid #000;background:#fff"></i>
+  <img class="abs" src="img/logo.jpg" alt="FRST logo" style="left:40.2pt;top:9.6pt;width:198.7pt;height:56pt">
+  <!-- ===== TITLE ===== -->
+  <span class="t b" style="left:130.6pt;top:77.8pt;font-size:12pt">APPLICATION FOR EMPLOYMENT</span>
+  <span class="ar" dir="rtl" data-k="0" data-w="60.9" style="right:195.7pt;top:77.5pt;font-size:14pt;transform-origin:100% 50%;transform:scaleX(0.808)">إستمارة توظيف</span>
+  <!-- ===== NAME ===== -->
+  <i class="ln" style="left:88.5pt;top:99.05pt;width:347.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:88.5pt;top:117.95pt;width:347.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:88.45pt;top:99.0pt;width:0.5pt;height:19.4pt"></i>
+  <i class="ln" style="left:131.65pt;top:99.0pt;width:0.5pt;height:19.4pt"></i>
+  <i class="ln" style="left:349.55pt;top:99.0pt;width:0.5pt;height:19.4pt"></i>
+  <i class="ln" style="left:435.45pt;top:99.0pt;width:0.5pt;height:19.4pt"></i>
+  <span class="t b" style="left:94.7pt;top:100.06pt;font-size:11pt">NAME</span>
+  <span class="t b" id="pv-fullname" data-fit-w="214" style="left:132.4pt;top:100.39pt;font-size:14pt"></span>
+  <span class="ar" dir="rtl" data-k="1" data-w="13.7" style="right:164.2pt;top:101.8pt;font-size:16pt;transform-origin:100% 50%;transform:scaleX(0.617)">اسم</span>
+  <!-- ===== HEADSHOT (small photo) ===== -->
+  <i class="abs" style="left:452.2pt;top:88.2pt;width:124.3pt;height:120.6pt;border:1.5pt solid #385522;border-radius:.7pt;background:#fff"></i>
+  <img class="abs" id="pv-headshot" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Headshot" style="visibility:hidden;left:457.8pt;top:94.3pt;width:112.5pt;height:103.4pt">
+  <!-- ===== POSITION / SALARY / CONTRACT ===== -->
+  <i class="ln" style="left:87.5pt;top:138.35pt;width:359.6pt;height:0.5pt"></i>
+  <i class="ln" style="left:87.5pt;top:157.25pt;width:359.6pt;height:0.5pt"></i>
+  <i class="ln" style="left:87.5pt;top:176.25pt;width:359.6pt;height:0.5pt"></i>
+  <i class="ln" style="left:87.5pt;top:195.15pt;width:359.6pt;height:0.5pt"></i>
+  <i class="ln" style="left:87.55pt;top:138.3pt;width:0.5pt;height:57.3pt"></i>
+  <i class="ln" style="left:221.55pt;top:138.3pt;width:0.5pt;height:57.3pt"></i>
+  <i class="ln" style="left:328.95pt;top:138.3pt;width:0.5pt;height:57.3pt"></i>
+  <i class="ln" style="left:446.55pt;top:138.3pt;width:0.5pt;height:57.3pt"></i>
+  <span class="t b" style="left:93.7pt;top:139.32pt;font-size:10pt">POITION APPLIED</span>
+  <span class="t b" id="pv-position" data-fit-w="98" style="left:227.7pt;top:139.46pt;font-size:11pt;color:#E36C09"></span>
+  <span class="ar" dir="rtl" data-k="2" data-w="67.06" style="right:152.9pt;top:140.55pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.561)">بالطلب لشغله المتقدم المنصب</span>
+  <span class="t b" style="left:93.7pt;top:158.22pt;font-size:10pt">MONTHLY SALARY</span>
+  <span class="t b" id="pv-salary" data-fit-w="98" style="left:227.7pt;top:158.26pt;font-size:11pt;color:#E36C09"></span>
+  <span class="ar" dir="rtl" data-k="3" data-w="32.68" style="right:153.0pt;top:159.35pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.734)">شهري راتب</span>
+  <span class="t b" style="left:93.7pt;top:177.22pt;font-size:10pt">CONTRACT PERIOD</span>
+  <span class="t b" id="pv-contract" data-fit-w="98" style="left:227.7pt;top:177.26pt;font-size:11pt;color:#E36C09"></span>
+  <span class="ar" dir="rtl" data-k="4" data-w="25.03" style="right:152.8pt;top:178.35pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.705)">العقد مدة</span>
+  <!-- ===== PASSPORT DETAILS (left) + WORK EXPERIENCE (right) ===== -->
+  <i class="ln" style="left:85.2pt;top:214.45pt;width:483.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.2pt;top:228.8pt;width:483.4pt;height:1.0pt"></i>
+  <i class="ln" style="left:85.15pt;top:214.4pt;width:0.5pt;height:92.9pt"></i>
+  <i class="ln" style="left:214.85pt;top:214.9pt;width:0.5pt;height:14.9pt"></i>
+  <i class="ln" style="left:171.35pt;top:228.8pt;width:0.5pt;height:78.5pt"></i>
+  <i class="ln" style="left:243.55pt;top:228.8pt;width:0.5pt;height:78.5pt"></i>
+  <i class="ln" style="left:315.45pt;top:228.8pt;width:0.5pt;height:78.5pt"></i>
+  <i class="ln" style="left:85.7pt;top:248.65pt;width:230.2pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.7pt;top:268.05pt;width:230.2pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.7pt;top:287.45pt;width:230.2pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.7pt;top:306.85pt;width:230.2pt;height:0.5pt"></i>
+  <i class="ln" style="left:332.35pt;top:214.9pt;width:0.5pt;height:112.6pt"></i>
+  <i class="ln" style="left:427.35pt;top:228.8pt;width:0.5pt;height:98.7pt"></i>
+  <i class="ln" style="left:478.75pt;top:214.9pt;width:0.5pt;height:88.1pt"></i>
+  <i class="ln" style="left:568.15pt;top:214.4pt;width:0.5pt;height:113.1pt"></i>
+  <i class="ln" style="left:332.4pt;top:268.05pt;width:235.7pt;height:0.5pt"></i>
+  <i class="ln" style="left:332.4pt;top:302.55pt;width:235.7pt;height:0.5pt"></i>
+  <i class="ln" style="left:332.4pt;top:327.05pt;width:235.7pt;height:0.5pt"></i>
+  <span class="t b" style="left:90.8pt;top:215.36pt;font-size:11pt">PASSPORT DETAILS</span>
+  <span class="ar" dir="rtl" data-k="5" data-w="41.66" style="right:298.6pt;top:216.0pt;font-size:12pt;transform-origin:100% 50%;transform:scaleX(0.516)"><span style="color:#C00000">السفر</span> جواز تفاصيل</span>
+  <span class="t b" style="left:342.6pt;top:215.36pt;font-size:11pt">WORK EXPERIENCE</span>
+  <span class="ar" dir="rtl" data-k="6" data-w="33.0" style="right:32.8pt;top:216.55pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.571)">العمل في خبرة</span>
+  <span class="t b" style="left:91.4pt;top:230.86pt;font-size:11pt">Passport No.</span>
+  <span class="t b" id="pv-passportno" data-fit-w="62" style="left:177.0pt;top:230.86pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="7" data-w="38.89" style="right:284.6pt;top:232.05pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.679)">السفر جواز رقم</span>
+  <span class="t b" style="left:91.3pt;top:249.66pt;font-size:11pt">Date Of Issue</span>
+  <span class="t b" id="pv-issuedate" data-fit-w="62" style="left:177.0pt;top:249.66pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="8" data-w="27.89" style="right:284.6pt;top:250.75pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.542)">المسألة تاريخ</span>
+  <span class="t b" style="left:91.3pt;top:269.06pt;font-size:11pt">Place Of Issue</span>
+  <span class="t b" id="pv-issueplace" data-fit-w="62" style="left:177.0pt;top:269.06pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="9" data-w="38.65" style="right:284.5pt;top:270.15pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.787)">الصدار مكان</span>
+  <span class="t b" style="left:90.8pt;top:288.39pt;font-size:10.5pt">Date Of Expiry</span>
+  <span class="t b" id="pv-expirydate" data-fit-w="62" style="left:177.0pt;top:288.46pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="10" data-w="25.42" style="right:284.7pt;top:289.65pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.536)">النتهاء تاريخ</span>
+  <span class="ar" dir="rtl" data-k="11" data-w="25.08" style="right:207.8pt;top:231.78pt;font-size:10.5pt;transform-origin:100% 50%;transform:scaleX(0.458)">المنزلي التدبير</span>
+  <span class="t b" style="left:338.1pt;top:242.69pt;font-size:10.5pt">House Keeping</span>
+  <span class="ar" dir="rtl" data-k="12" data-w="12.73" style="right:93.8pt;top:231.78pt;font-size:10.5pt;transform-origin:100% 50%;transform:scaleX(0.684)">غسل</span>
+  <span class="t b" style="left:484.5pt;top:242.66pt;font-size:11pt">Washing</span>
+  <span class="ar" dir="rtl" data-k="13" data-w="11.6" style="right:234.0pt;top:270.15pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.427)">تنظيف</span>
+  <span class="t b" style="left:338.1pt;top:281.86pt;font-size:11pt">Cleaning</span>
+  <span class="ar" dir="rtl" data-k="14" data-w="37.67" style="right:58.7pt;top:270.08pt;font-size:10.5pt;transform-origin:100% 50%;transform:scaleX(0.695)">الطفال مجالسة</span>
+  <span class="t b" style="left:484.5pt;top:281.29pt;font-size:10.5pt">Baby Sitting</span>
+  <span class="ar" dir="rtl" data-k="15" data-w="9.29" style="right:242.8pt;top:304.28pt;font-size:10.5pt;transform-origin:100% 50%;transform:scaleX(0.563)">طبخ</span>
+  <span class="t b" style="left:338.1pt;top:314.79pt;font-size:10.5pt">COOKING</span>
+  <!-- ticks: House Keeping, Cleaning, Cooking -->
+  <svg class="chk" id="chk-housekeeping" style="left:432.6pt;top:249.2pt" viewBox="0 0 15 15"><path fill="#211F1F" d="M0.6 8.6 L3.2 6.2 L5.7 8.9 L11.9 0.6 L14.6 2.6 L6.0 14.4 L4.6 14.4 Z"/></svg>
+  <svg class="chk" id="chk-cleaning" style="left:432.6pt;top:275.6pt" viewBox="0 0 15 15"><path fill="#211F1F" d="M0.6 8.6 L3.2 6.2 L5.7 8.9 L11.9 0.6 L14.6 2.6 L6.0 14.4 L4.6 14.4 Z"/></svg>
+  <svg class="chk" id="chk-cooking" style="left:432.6pt;top:309.2pt" viewBox="0 0 15 15"><path fill="#211F1F" d="M0.6 8.6 L3.2 6.2 L5.7 8.9 L11.9 0.6 L14.6 2.6 L6.0 14.4 L4.6 14.4 Z"/></svg>
+  <!-- ===== APPLICANTS DETAILS ===== -->
+  <span class="t b" style="left:90.1pt;top:320.86pt;font-size:11pt">APPLICANTS DETAILS</span>
+  <span class="ar" dir="rtl" data-k="16" data-w="45.58" style="right:298.6pt;top:321.95pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.636)">تفاصيل المتقدمين</span>
+  <i class="ln" style="left:85.5pt;top:332.95pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:351.75pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:370.75pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:389.55pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:408.65pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:427.55pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:446.45pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:465.35pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:484.25pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:503.15pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:522.05pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.5pt;top:541.05pt;width:247.4pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.35pt;top:332.9pt;width:0.5pt;height:208.6pt"></i>
+  <i class="ln" style="left:173.45pt;top:332.9pt;width:0.5pt;height:208.6pt"></i>
+  <i class="ln" style="left:258.85pt;top:332.9pt;width:0.5pt;height:208.6pt"></i>
+  <i class="ln" style="left:332.35pt;top:332.9pt;width:0.5pt;height:208.6pt"></i>
+  <span class="t" style="left:91.5pt;top:334.26pt;font-size:11pt">Nationality</span>
+  <span class="t" id="pv-nationality" data-fit-w="76" style="left:179.7pt;top:334.26pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="17" data-w="11.31" style="right:267.2pt;top:334.95pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.45)">جنسية</span>
+  <span class="t" style="left:91.5pt;top:353.06pt;font-size:11pt">Religion</span>
+  <span class="t" id="pv-religion" data-fit-w="72" style="left:182.7pt;top:353.06pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="18" data-w="4.77" style="right:267.2pt;top:353.95pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.459)">يِن</span>
+  <span class="t" style="left:91.5pt;top:372.06pt;font-size:11pt">Date of birth</span>
+  <span class="t b" id="pv-dob" data-fit-w="76" style="left:179.7pt;top:371.66pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="19" data-w="24.01" style="right:267.2pt;top:372.95pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.528)">الميلِ تاريخ</span>
+  <span class="t" style="left:91.5pt;top:391.66pt;font-size:11pt">Age</span>
+  <span class="t" id="pv-age" data-fit-w="76" style="left:179.7pt;top:391.66pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="20" data-w="16.76" style="right:267.2pt;top:391.75pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(1.049)">عمر</span>
+  <span class="t" style="left:91.5pt;top:409.96pt;font-size:11pt">Place of birth</span>
+  <span class="t" id="pv-pob" data-fit-w="76" style="left:179.7pt;top:409.96pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="21" data-w="33.96" style="right:267.2pt;top:410.85pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.758)">الميلِ مكان</span>
+  <span class="t" style="left:91.5pt;top:428.86pt;font-size:11pt">Contact</span>
+  <span class="t" id="pv-contact" data-fit-w="76" style="left:179.7pt;top:428.79pt;font-size:10.5pt"></span>
+  <span class="ar" dir="rtl" data-k="22" data-w="17.02" style="right:267.2pt;top:429.65pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.377)">تاون ليفينج</span>
+  <span class="t" style="left:91.5pt;top:447.86pt;font-size:11pt">Marital status</span>
+  <span class="t" id="pv-marital" data-fit-w="76" style="left:179.7pt;top:447.86pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="23" data-w="40.67" style="right:267.2pt;top:448.45pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.646)">الجتماعية الحالة</span>
+  <span class="t" style="left:91.5pt;top:466.66pt;font-size:11pt">No.Of children</span>
+  <span class="t" id="pv-children" data-fit-w="76" style="left:179.7pt;top:466.66pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="24" data-w="14.12" style="right:267.2pt;top:467.55pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.608)">أطفال</span>
+  <span class="t" style="left:91.5pt;top:485.46pt;font-size:11pt">Weight (kg)</span>
+  <span class="t" id="pv-weight" data-fit-w="76" style="left:179.7pt;top:485.46pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="25" data-w="14.55" style="right:267.2pt;top:486.35pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.969)">وزن</span>
+  <span class="t" style="left:91.5pt;top:504.56pt;font-size:11pt">Height (ft)</span>
+  <span class="t" id="pv-height" data-fit-w="76" style="left:179.7pt;top:504.56pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="26" data-w="11.85" style="right:267.2pt;top:505.25pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.49)">ارتفاع</span>
+  <span class="t" style="left:91.5pt;top:523.46pt;font-size:11pt">Education</span>
+  <span class="t" id="pv-education" data-fit-w="76" style="left:179.7pt;top:523.46pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="27" data-w="6.19" style="right:267.2pt;top:524.25pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.291)">تعليم</span>
+  <!-- ===== KNOWLEDGE OF LANGUAGES ===== -->
+  <span class="t b" style="left:90.1pt;top:542.86pt;font-size:11pt">KNOWLEDGE OF LANGUAGES</span>
+  <span class="ar" dir="rtl" data-k="28" data-w="48.22" style="right:292.4pt;top:543.95pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.958)">معرفة اللغات</span>
+  <i class="ln" style="left:85.3pt;top:554.75pt;width:229.6pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.3pt;top:573.65pt;width:229.6pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.3pt;top:592.75pt;width:229.6pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.35pt;top:554.7pt;width:0.5pt;height:38.5pt"></i>
+  <i class="ln" style="left:182.65pt;top:554.7pt;width:0.5pt;height:38.5pt"></i>
+  <i class="ln" style="left:243.85pt;top:554.7pt;width:0.5pt;height:38.5pt"></i>
+  <i class="ln" style="left:314.35pt;top:554.7pt;width:0.5pt;height:38.5pt"></i>
+  <span class="t" style="left:91.5pt;top:556.16pt;font-size:11pt">English</span>
+  <span class="t" id="pv-english" data-fit-w="52" style="left:188.8pt;top:556.16pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="29" data-w="16.39" style="right:285.4pt;top:556.85pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.507)">إنجليزي</span>
+  <span class="t" style="left:91.5pt;top:575.06pt;font-size:11pt">Arabic</span>
+  <span class="t" id="pv-arabic" data-fit-w="52" style="left:188.8pt;top:575.06pt;font-size:11pt"></span>
+  <span class="ar" dir="rtl" data-k="30" data-w="13.46" style="right:285.5pt;top:575.85pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.626)">عربي</span>
+  <!-- ===== PREVIOUS EMPLOYMENT ABROAD ===== -->
+  <span class="t b" style="left:90.1pt;top:593.98pt;font-size:9pt">PREVIOUS EMPLOYMENT ABROAD</span>
+  <span class="ar" dir="rtl" data-k="31" data-w="57.97" style="right:306.1pt;top:594.85pt;font-size:9pt;transform-origin:100% 50%;transform:scaleX(0.802)">العمالة السابقة بالخارج</span>
+  <i class="ln" style="left:85.3pt;top:603.65pt;width:231.3pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.3pt;top:622.65pt;width:231.3pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.3pt;top:641.55pt;width:231.3pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.3pt;top:660.45pt;width:231.3pt;height:0.5pt"></i>
+  <i class="ln" style="left:85.35pt;top:603.6pt;width:0.5pt;height:57.3pt"></i>
+  <i class="ln" style="left:169.55pt;top:603.6pt;width:0.5pt;height:57.3pt"></i>
+  <i class="ln" style="left:236.05pt;top:603.6pt;width:0.5pt;height:57.3pt"></i>
+  <i class="ln" style="left:316.15pt;top:603.6pt;width:0.5pt;height:57.3pt"></i>
+  <span class="t b" style="left:91.5pt;top:604.66pt;font-size:11pt">Country</span>
+  <span class="ar" dir="rtl" data-k="32" data-w="11.21" style="right:447.3pt;top:605.75pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.995)">ِِولة</span>
+  <span class="t b" style="left:175.6pt;top:604.66pt;font-size:11pt">Period</span>
+  <span class="ar" dir="rtl" data-k="33" data-w="15.25" style="right:367.5pt;top:605.75pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.996)">فترة</span>
+  <span class="t b" style="left:242.2pt;top:604.66pt;font-size:11pt">Post</span>
+  <span class="ar" dir="rtl" data-k="34" data-w="14.05" style="right:306.1pt;top:605.75pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.864)">بريد</span>
+  <div id="pv-prevjobs"></div>
+  <!-- ===== REMARKS ===== -->
+  <i class="abs" style="left:83.75pt;top:666.45pt;width:232.1pt;height:66.5pt;border:.5pt solid #000"></i>
+  <span class="t b" style="left:154.4pt;top:667.36pt;font-size:11pt">REMARKS</span>
+  <span class="ar" dir="rtl" data-k="35" data-w="32.44" style="right:350.2pt;top:668.45pt;font-size:11pt;transform-origin:100% 50%;transform:scaleX(0.984)">ملحظات</span>
+  <p class="para" id="pv-remarks" data-fit-h="52" style="left:89.2pt;top:679.3pt;width:195pt;line-height:14.2pt"></p>
+  <!-- ===== OTHER SKILLS ===== -->
+  <i class="abs" style="left:334.55pt;top:672.05pt;width:241.9pt;height:56.2pt;border:.5pt solid #000"></i>
+  <span class="t b" style="left:340.2pt;top:673.1pt;font-size:12pt">Other SKILLS:-</span>
+  <span class="ar" dir="rtl" data-k="36" data-w="58.52" style="right:101.5pt;top:674.3pt;font-size:12pt;transform-origin:100% 50%;transform:scaleX(1.055)">مهارات اخرى</span>
+  <p class="para" id="pv-skills" data-fit-h="41" style="left:340.2pt;top:687.2pt;width:229.7pt;line-height:20.7pt;color:#000"></p>
+  <!-- ===== FULL BODY PHOTO ===== -->
+  <i class="abs" style="left:393pt;top:332.2pt;width:174.6pt;height:339.9pt;border:3pt solid #385522;border-radius:1.5pt;background:#fff"></i>
+  <img class="abs" id="pv-fullbody" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Full body photo" style="visibility:hidden;left:422.9pt;top:352.9pt;width:112.6pt;height:275.1pt">
+</section>
 
-      <table class="cv-table">
-        <tr>
-          <td class="cv-label">NAME</td>
-          <td class="cv-value" id="pv-fullname">&nbsp;</td>
-          <td class="cv-ar">اسم</td>
-          <td class="cv-photo-cell" rowspan="4"><img class="cv-headshot" id="pv-headshot"></td>
-        </tr>
-        <tr><td class="cv-label">POITION APPLIED</td><td class="cv-value" id="pv-position">&nbsp;</td><td class="cv-ar">بالطلب لشغله المتقدم المنصب</td></tr>
-        <tr><td class="cv-label">MONTHLY SALARY</td><td class="cv-value" id="pv-salary">&nbsp;</td><td class="cv-ar">شهري راتب</td></tr>
-        <tr><td class="cv-label">CONTRACT PERIOD</td><td class="cv-value" id="pv-contract">&nbsp;</td><td class="cv-ar">العقد مدة</td></tr>
-      </table>
+<!-- ===================================================== PAGE 2 : PASSPORT ===================================================== -->
+<section class="page p2">
+  <img class="abs scan" id="pv-passportscan" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Passport" style="visibility:hidden;left:43pt;top:40pt;width:509.3pt;height:717.6pt">
+</section>
 
-      <div class="cv-two-col">
-        <div class="cv-passport-block">
-          <table class="cv-table">
-            <tr><th colspan="3"><div class="cv-section">PASSPORT DETAILS <span class="ar">السفر جواز تفاصيل</span></div></th></tr>
-            <tr><td class="cv-label">Passport No.</td><td id="pv-passportno">&nbsp;</td><td class="cv-ar">السفر جواز رقم</td></tr>
-            <tr><td class="cv-label">Date Of Issue</td><td id="pv-issuedate">&nbsp;</td><td class="cv-ar">المسألة تاريخ</td></tr>
-            <tr><td class="cv-label">Place Of Issue</td><td id="pv-issueplace">&nbsp;</td><td class="cv-ar">الصدار مكان</td></tr>
-            <tr><td class="cv-label">Date Of Expiry</td><td id="pv-expirydate">&nbsp;</td><td class="cv-ar">النتهاء تاريخ</td></tr>
-          </table>
-        </div>
-        <div class="cv-workexp-block">
-          <table class="cv-table">
-            <tr><th colspan="2"><div class="cv-section">WORK EXPERIENCE <span class="ar">العمل في خبرة</span></div></th></tr>
-            <tr>
-              <td class="cv-skill-cell"><span class="ar-tiny">المنزلي التدبير</span>House Keeping<span class="cv-checkmark" id="chk-housekeeping"></span></td>
-              <td class="cv-skill-cell"><span class="ar-tiny">غسل</span>Washing</td>
-            </tr>
-            <tr>
-              <td class="cv-skill-cell"><span class="ar-tiny">تنظيف</span>Cleaning<span class="cv-checkmark" id="chk-cleaning"></span></td>
-              <td class="cv-skill-cell"><span class="ar-tiny">الطفال مجالسة</span>Baby Sitting</td>
-            </tr>
-            <tr>
-              <td class="cv-skill-cell"><span class="ar-tiny">طبخ</span>COOKING<span class="cv-checkmark" id="chk-cooking"></span></td>
-              <td>&nbsp;</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-
-      <div class="cv-applicants-wrap">
-        <div class="cv-sidebar"><div class="bar-blue"></div><div class="bar-orange"></div></div>
-        <div class="cv-applicants-content">
-          <table class="cv-table">
-            <tr><th colspan="3"><div class="cv-section">APPLICANTS DETAILS <span class="ar">تفاصيل المتقدمين</span></div></th></tr>
-            <tr><td class="cv-label">Nationality</td><td id="pv-nationality">&nbsp;</td><td class="cv-ar">جنسية</td></tr>
-            <tr><td class="cv-label">Religion</td><td id="pv-religion">&nbsp;</td><td class="cv-ar">يِن</td></tr>
-            <tr><td class="cv-label">Date of birth</td><td id="pv-dob">&nbsp;</td><td class="cv-ar">الميلِ تاريخ</td></tr>
-            <tr><td class="cv-label">Age</td><td id="pv-age">&nbsp;</td><td class="cv-ar">عمر</td></tr>
-            <tr><td class="cv-label">Place of birth</td><td id="pv-pob">&nbsp;</td><td class="cv-ar">الميلِ مكان</td></tr>
-            <tr><td class="cv-label">Contact</td><td id="pv-contact">&nbsp;</td><td class="cv-ar">تاون ليفينج</td></tr>
-            <tr><td class="cv-label">Marital status</td><td id="pv-marital">&nbsp;</td><td class="cv-ar">الجتماعية الحالة</td></tr>
-            <tr><td class="cv-label">No.Of children</td><td id="pv-children">&nbsp;</td><td class="cv-ar">أطفال</td></tr>
-            <tr><td class="cv-label">Weight (kg)</td><td id="pv-weight">&nbsp;</td><td class="cv-ar">وزن</td></tr>
-            <tr><td class="cv-label">Height (ft)</td><td id="pv-height">&nbsp;</td><td class="cv-ar">ارتفاع</td></tr>
-            <tr><td class="cv-label">Education</td><td id="pv-education">&nbsp;</td><td class="cv-ar">تعليم</td></tr>
-          </table>
-
-          <table class="cv-table">
-            <tr><th colspan="3"><div class="cv-section">KNOWLEDGE OF LANGUAGES <span class="ar">معرفة اللغات</span></div></th></tr>
-            <tr><td class="cv-label">English</td><td id="pv-english">&nbsp;</td><td class="cv-ar">إنجليزي</td></tr>
-            <tr><td class="cv-label">Arabic</td><td id="pv-arabic">&nbsp;</td><td class="cv-ar">عربي</td></tr>
-          </table>
-
-          <table class="cv-table">
-            <thead>
-              <tr><th colspan="3"><div class="cv-section">PREVIOUS EMPLOYMENT ABROAD <span class="ar">العمالة السابقة بالخارج</span></div></th></tr>
-              <tr class="cv-prevjob-header">
-                <td>Country<span class="ar-tiny">ِِولة</span></td>
-                <td>Period<span class="ar-tiny">فترة</span></td>
-                <td>Post<span class="ar-tiny">بريد</span></td>
-              </tr>
-            </thead>
-            <tbody id="pv-prevjobs-body">
-              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="cv-fullbody-cell"><img class="cv-fullbody" id="pv-fullbody"></div>
-      </div>
-
-      <div class="cv-bottom-row">
-        <div class="cv-remarks-box">
-          <span class="box-title">REMARKS <span class="ar">ملحظات</span></span>
-          <span id="pv-remarks"></span>
-        </div>
-        <div class="cv-skills-box">
-          <span class="box-title">Other SKILLS:- <span class="ar">مهارات اخرى</span></span>
-          <span id="pv-skills"></span>
-        </div>
-      </div>
-    </div>
-
-    <div class="cv-page cv-page2" id="cvPage2">
-      <img class="cv-passport-scan" id="pv-passportscan" style="display:none">
-      <div class="cv-page2-placeholder" id="pv-passportscan-placeholder">Passport scan will appear here once uploaded</div>
-    </div>
 
   </div>
 </div>
 
+<script src="../shared/cv-core.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
