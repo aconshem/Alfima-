@@ -1,0 +1,60 @@
+/* ONE STOP RECRUITMENT AGENCY – CV TEMPLATE (US Letter, 612pt x 792pt). Placeholders are the pv-* ids in index.html */
+  @page { size: 612pt 792pt; margin: 0; }
+
+  .page, .page * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .page {
+    font-family: "Times New Roman", "Liberation Serif", Times, serif; color: #000;
+    position: relative;
+    width: 612pt; height: 792pt;
+    background: #fff;
+    overflow: hidden;
+    margin: 12px auto;
+    box-shadow: 0 0 8px rgba(0,0,0,.5);
+  }
+
+  /* ---------- tables ---------- */
+  .page table { border-collapse: collapse; table-layout: fixed; width: 100%; }
+  .page td { border: .75pt solid #000; padding: 0; overflow: hidden; white-space: nowrap; vertical-align: middle; }
+  .red   { background: #C00000; border-color: #000; }
+
+  /* label cells (Times bold) */
+  .page .l { font: bold 8.9pt/1 "Times New Roman","Liberation Serif",serif; padding-left: 5.5pt; }
+  /* value cells (Calibri bold) */
+  .page .v { font: bold 9.7pt/1 Calibri, Carlito, "Segoe UI", sans-serif; padding-left: 12.5pt; vertical-align: top; padding-top: 2pt; }
+  /* value cells that are Arial bold */
+  .page .va { font-family: Arial, "Liberation Sans", Helvetica, sans-serif; font-weight: bold; }
+  /* value cells in Times regular (previous employment) */
+  .page .vt { font: 8.3pt/1 "Times New Roman","Liberation Serif",serif; padding-left: 5.5pt; vertical-align: top; padding-top: 1.5pt; }
+  /* tiny Arabic captions at the right edge of a row */
+  .page .ar { font: 3.1pt/1 "Arial","Noto Sans Arabic","Segoe UI",sans-serif; text-align: right; padding-right: .8pt; direction: rtl; vertical-align: middle; color:#000; }
+  .page .lb { vertical-align: bottom; padding-bottom: 1.7pt; }   /* label sitting on the bottom of its row */
+
+  .page .whitebold { color:#fff; font-weight:bold; }
+
+  .page .abs { position: absolute; }
+  .page .stack table { margin-bottom: -.75pt; }   /* collapsed borders of stacked tables overlap */
+
+  /* check-box arrow */
+  .page .chk { display:block; width: 9.5pt; height: 9.5pt; margin: 0 auto; }
+  .page td.cb { text-align: center; vertical-align: top; padding-top: 1.5pt; }
+  .page td.cb .box { display:block; }
+
+  /* remarks */
+  .page .remarks { font: bold 9.15pt/11.9pt "Times New Roman","Liberation Serif",serif; }
+  .page .remarks ul { margin: 0; padding: 0; list-style: none; }
+  .page .remarks li { position: relative; padding-left: 38.5pt; text-transform: uppercase; }
+  .page .remarks li::before { content: "\2022"; position: absolute; left: 21pt; font-size: 10pt; }
+  .page .remarks .hl { background: #FFFF00; text-decoration: underline; }
+
+  /* ---------- print ---------- */
+  @media print {
+    .page.p1 { break-after: page; page-break-after: always; }
+    .page.p2 { height: 791pt; }       /* 1pt shorter so the browser never adds a blank 3rd page */
+  }
+
+  .page .v, .page .vt { text-transform: uppercase; }
+  .page img.abs { object-fit: cover; }
+  .page img.abs.scan { object-fit: contain; }
+  .page td.lang { font: italic 8pt/1 "Times New Roman","Liberation Serif",serif; padding-left: 30pt; vertical-align: top; padding-top: 1.5pt; text-transform: none; }

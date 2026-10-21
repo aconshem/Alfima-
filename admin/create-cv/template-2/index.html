@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create CV — Template 2 (One Stop) — Al Fima Agency Admin</title>
+<link rel="icon" type="image/png" href="../../../assets/images/favicon-32.png">
+<link rel="stylesheet" href="../shared/builder.css">
+<link rel="stylesheet" href="template.css">
+<!-- OCR (passport reading) -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Create CV — Template 2 · One Stop</div>
+  <a href="../index.html">&larr; Back to Templates</a>
+</div>
+
+<div class="builder-layout">
+
+  <!-- ===================== LEFT: FORM ===================== -->
+  <div class="form-scroll">
+
+    <div class="panel">
+      <h2>1. Upload Passport</h2>
+      <label class="upload-box" id="passportUploadBox">
+        <input type="file" id="passportInput" accept="image/*">
+        <span id="passportUploadLabel">Drag &amp; drop a passport photo/scan here, or click to browse (JPG/PNG)</span>
+        <img id="passportPreviewImg" class="upload-preview" style="display:none">
+      </label>
+      <div id="ocrStatus" class="status-msg status-info" style="display:none"></div>
+      <div id="ocrProgressWrap" style="display:none">
+        <div class="progress-bar"><div id="ocrProgressFill" class="progress-bar-fill"></div></div>
+      </div>
+      <p style="font-size:11.5px;color:#6b7280;margin-top:10px;">
+        We try to read the Machine Readable Zone first (most accurate), and also scan the visible page for details
+        like place of birth and height. Fields highlighted in amber below could not be read with full confidence —
+        please double-check them.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>2. Photo for the CV</h2>
+      <h3>Full-body photo (right side of page 1)</h3>
+      <label class="upload-box">
+        <input type="file" id="fullbodyInput" accept="image/*">
+        <span id="fullbodyLabel">Click to upload full-body photo</span>
+        <img id="fullbodyPreviewImg" class="upload-preview" style="display:none">
+      </label>
+      <p class="hint-box">The passport you upload above is also placed on page 2. This template has no small headshot.</p>
+    </div>
+
+    <div class="panel">
+      <h2>3. Personal Details</h2>
+      <div class="field"><label>Full Name</label><input type="text" id="f-fullname"></div>
+      <div class="field-row">
+        <div class="field"><label>Position Applied</label><input type="text" id="f-position" value="HOUSEMAID"></div>
+        <div class="field"><label>Salary</label><input type="text" id="f-salary" placeholder="(blank in template)"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Nationality</label><input type="text" id="f-nationality"></div>
+        <div class="field"><label>Contract Period</label><input type="text" id="f-contract" value="2 YEARS"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Religion</label><input type="text" id="f-religion" value="NON MUSLIM"></div>
+        <div class="field"><label>Passport No.</label><input type="text" id="f-passportno"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Date of Birth</label><input type="date" id="f-dob"></div>
+        <div class="field"><label>Age</label><input type="text" id="f-age"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Place of Birth</label><input type="text" id="f-pob"></div>
+        <div class="field"><label>Home Address</label><input type="text" id="f-address"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Marital Status</label><input type="text" id="f-marital" value="SINGLE"></div>
+        <div class="field"><label>No. of Children</label><input type="text" id="f-children" value="NONE"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Educational Background</label><input type="text" id="f-education" value="HIGH SCHOOL"></div>
+        <div class="field"><label>Contact Number</label><input type="text" id="f-contact"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Weight</label><input type="text" id="f-weight" placeholder="e.g. 62 KG"></div>
+        <div class="field"><label>Complexion</label><input type="text" id="f-complexion" placeholder="e.g. BROWN"></div>
+      </div>
+      <div class="field">
+        <label>Height</label>
+        <div class="field-row">
+          <input type="number" id="f-height-ft" placeholder="Feet" min="0" max="8">
+          <input type="number" id="f-height-in" placeholder="Inches" min="0" max="11">
+        </div>
+        <div class="field-hint">Shown on the CV as 5'8" — also read from the passport's Description page if included.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Languages</h2>
+      <div class="field-row">
+        <div class="field"><label>English</label>
+          <select id="f-english"><option>Fluent</option><option>Fair</option><option>Poor</option><option value="">None</option></select>
+        </div>
+        <div class="field"><label>Arabic</label>
+          <select id="f-arabic"><option>Poor</option><option>Fair</option><option>Fluent</option><option value="">None</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>5. Previous Employment Abroad</h2>
+      <div id="previousEmploymentFields"></div>
+      <button type="button" class="btn btn-dark btn-block" id="addPreviousEmploymentBtn">+ Add another country</button>
+      <p class="hint-box">Several countries / periods are printed in the same two cells, separated by commas.</p>
+    </div>
+
+    <div class="panel">
+      <h2>6. Housemaid Work Experience</h2>
+      <div class="checkbox-row"><input type="checkbox" id="f-chk-skill1" checked><label for="f-chk-skill1">First box (top-left)</label></div>
+      <div class="field"><label>Label for that first box</label><input type="text" id="f-skill1-label" placeholder="(empty in the template)"></div>
+      <div class="checkbox-row"><input type="checkbox" id="f-chk-cleaning" checked><label for="f-chk-cleaning">Cleaning</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="f-chk-ironing" checked><label for="f-chk-ironing">Ironing</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="f-chk-sewing"><label for="f-chk-sewing">Sewing</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="f-chk-cooking" checked><label for="f-chk-cooking">Cooking</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="f-chk-babycare" checked><label for="f-chk-babycare">Baby care</label></div>
+    </div>
+
+    <div class="panel">
+      <h2>7. Contact Person</h2>
+      <div class="field"><label>Name</label><input type="text" id="f-cpname"></div>
+      <div class="field"><label>Contact Number</label><input type="text" id="f-cpnumber"></div>
+      <div class="field-row">
+        <div class="field"><label>Relationship</label><input type="text" id="f-cprel"></div>
+        <div class="field"><label>Address</label><input type="text" id="f-cpaddress"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>8. Remarks</h2>
+      <div class="field"><label>One bullet per line</label>
+        <textarea id="f-remarks" rows="5">She can work all around and do household chores.
+She can take care of children.
+She’s willing to know how to cook Arabic foods and more.
+She’s willing to learn how to speak Arabic language.</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <button class="btn btn-primary btn-block" id="generateBtn">Generate PDF</button>
+      <div id="genStatus" class="status-msg" style="display:none"></div>
+      <p class="hint-box">Opens your browser&rsquo;s print dialog &mdash; choose <strong>Save as PDF</strong>. <kbd>Ctrl</kbd>+<kbd>P</kbd> (<kbd>&#8984;</kbd>+<kbd>P</kbd> on Mac) does the same. The file name is suggested from the candidate&rsquo;s name.</p>
+    </div>
+
+  </div>
+
+  <!-- ===================== RIGHT: LIVE PREVIEW (this is what prints) ===================== -->
+  <div class="preview-scroll">
+<!-- ===================================================== PAGE 1 ===================================================== -->
+<section class="page p1">
+
+  <!-- LOGO -->
+  <img class="abs" src="img/logo.jpg" alt="One Stop Recruitment Agency"
+       style="left:32.04pt; top:17.64pt; width:544.7pt; height:56.2pt;">
+
+  <!-- ===== TOP BLOCK: header + Full Name / Nationality / Religion ===== -->
+  <table class="abs" style="left:40.8pt; top:86.1pt; width:546.3pt;">
+    <colgroup>
+      <col style="width:85.4pt"><col style="width:164.2pt"><col style="width:66.2pt">
+      <col style="width:98.9pt"><col style="width:80.2pt"><col style="width:51.4pt">
+    </colgroup>
+    <tr style="height:33.6pt">
+      <td class="red whitebold" colspan="3" style="font:bold 9.5pt/1 'Times New Roman','Liberation Serif',serif; letter-spacing:.3pt; padding-left:5.5pt; vertical-align:top; padding-top:3.8pt;">PERSONAL&nbsp; DETAILS</td>
+      <td class="red whitebold" style="font:bold 10.8pt/1 'Times New Roman','Liberation Serif',serif; padding-left:3.7pt; vertical-align:top; padding-top:1pt;">Position Aplied</td>
+      <td class="red whitebold" id="pv-position" data-fit-w="62" style="font:bold 9.6pt/1 Arial,'Liberation Sans',sans-serif; padding-left:14pt; vertical-align:top; padding-top:1pt; text-transform:uppercase;"></td>
+      <td class="red ar" style="color:#fff;">الوظيفة</td>
+    </tr>
+    <tr style="height:16.8pt">
+      <td class="l">Full Name</td>
+      <td class="v va" style="font-size:8.2pt; padding-left:9pt; vertical-align:middle; padding-top:0" id="pv-fullname" data-fit-w="150"></td>
+      <td class="ar">الاسم الكامل</td>
+      <td class="l" style="padding-left:0; vertical-align:top; padding-top:1pt">Salary</td>
+      <td class="v" id="pv-salary" data-fit-w="62"></td>
+      <td class="ar">الراتب</td>
+    </tr>
+    <tr style="height:20.9pt">
+      <td class="l">Nationality</td>
+      <td class="v" style="vertical-align:top; padding-top:2.1pt;" id="pv-nationality" data-fit-w="150"></td>
+      <td class="ar">الجنسية</td>
+      <td class="l" style="padding-left:3.7pt">Contract Period</td>
+      <td class="v" style="padding-left:6pt; padding-top:2pt;" id="pv-contract" data-fit-w="68"></td>
+      <td class="ar">مدة العقد</td>
+    </tr>
+    <tr style="height:23.7pt">
+      <td class="l">Religion</td>
+      <td class="v" style="padding-top:2.1pt;" id="pv-religion" data-fit-w="150"></td>
+      <td class="ar">الديانة</td>
+      <td class="l" style="padding-left:3.7pt">Passport No.</td>
+      <td class="v" style="padding-left:5pt; padding-top:2.1pt;" id="pv-passportno" data-fit-w="70"></td>
+      <td class="ar">رقم الجواز</td>
+    </tr>
+  </table>
+
+  <!-- ===== LEFT COLUMN (stacked tables) ===== -->
+  <div class="abs stack" style="left:40.8pt; top:181.1pt; width:315.8pt;">
+
+    <!-- Personal details rows -->
+    <table>
+      <colgroup><col style="width:85.4pt"><col style="width:164.2pt"><col style="width:66.2pt"></colgroup>
+      <tr style="height:15.2pt"><td class="l">Date of&nbsp;&nbsp; Birth</td><td class="v" style="vertical-align:middle;padding-top:2pt" id="pv-dob" data-fit-w="148"></td><td class="ar">تاريخ الميلاد</td></tr>
+      <tr style="height:19.4pt"><td class="l" style="vertical-align:bottom;padding-bottom:3pt">Age</td><td class="v" style="padding-left:15pt; padding-top:5pt;" id="pv-age" data-fit-w="140"></td><td class="ar"></td></tr>
+      <tr style="height:16.6pt"><td class="l lb">Place of&nbsp;&nbsp; Birth</td><td class="v" style="vertical-align:middle;padding-top:3.8pt" id="pv-pob" data-fit-w="150"></td><td class="ar"></td></tr>
+      <tr style="height:17.2pt"><td class="l lb">Home&nbsp;Address</td><td class="v" style="vertical-align:middle;padding-top:3pt" id="pv-address" data-fit-w="150"></td><td class="ar"></td></tr>
+      <tr style="height:15.9pt"><td class="l lb">Marital&nbsp;&nbsp; Status</td><td class="v" style="padding-left:14pt; vertical-align:middle;padding-top:3.8pt" id="pv-marital" data-fit-w="136"></td><td class="ar">الاجتماعي</td></tr>
+      <tr style="height:17.3pt"><td class="l lb">No. of&nbsp;&nbsp;&nbsp; Children</td><td class="v" style="padding-left:15pt; vertical-align:middle;padding-top:2pt" id="pv-children" data-fit-w="136"></td><td class="ar">الأطفال</td></tr>
+      <tr style="height:23pt"><td class="l" style="white-space:normal; line-height:1.05; font-size:8.7pt">Educational<br>Background</td><td class="v" style="padding-left:11.5pt; vertical-align:middle; padding-top:0; padding-bottom:3.8pt" id="pv-education" data-fit-w="140"></td><td class="ar">المستوى</td></tr>
+      <tr style="height:17.3pt"><td class="l lb">Contact&nbsp;&nbsp;&nbsp; Number</td><td class="v va" style="padding-left:2pt; font-size:9.3pt; padding-top:1pt;" id="pv-contact" data-fit-w="158"></td><td class="ar">الاتصال</td></tr>
+    </table>
+
+    <!-- Previous employment -->
+    <table>
+      <colgroup><col style="width:85.4pt"><col style="width:109.4pt"><col style="width:121pt"></colgroup>
+      <tr style="height:16.7pt">
+        <td class="red whitebold" colspan="3" style="font: 7pt/1 'Times New Roman','Liberation Serif',serif; letter-spacing:-.6pt; padding-left:57pt; vertical-align:middle;">
+          Previous&nbsp; Employment&nbsp;&nbsp;&nbsp;<span style="font:bold 5.6pt/1 Arial,'Noto Sans Arabic',sans-serif; letter-spacing:0; margin-left:2pt">الفترة السابقة خارج البلد</span></td>
+      </tr>
+      <tr style="height:16.4pt"><td class="l" style="vertical-align:bottom; padding-bottom:1.5pt; font-size:8.7pt">Country:</td><td class="vt" id="pv-prevcountry" data-fit-w="100"></td><td></td></tr>
+      <tr style="height:18pt"><td class="l" style="vertical-align:bottom; padding-bottom:1.5pt; font-size:8.7pt">Period:</td><td class="vt" style="padding-left:5.5pt" id="pv-prevperiod" data-fit-w="100"></td><td></td></tr>
+    </table>
+
+    <!-- Work experience header -->
+    <table>
+      <tr style="height:28.55pt">
+        <td class="red whitebold" style="font: bold 10pt/1 'Times New Roman','Liberation Serif',serif; letter-spacing:-.95pt; padding-left:5.5pt; vertical-align:top; padding-top:5.1pt;">
+          HousemaidWorkExperience(s)<span style="font: bold 10pt/1 Arial,'Noto Sans Arabic',sans-serif; letter-spacing:0; margin-left:0pt">خبرات لعمل</span></td>
+      </tr>
+    </table>
+
+    <!-- Skills check-boxes (tick = put the .chk svg in the box cell, remove it to untick) -->
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <symbol id="tick" viewBox="0 0 10 10">
+          <path d="M10 0.5 L6.2 1.6 L7.9 2.2 L8.7 4.1 Z" fill="#000"/>
+          <path d="M3.7 6.1 L8.2 1.7" stroke="#000" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <path d="M0.3 7.3 L2.9 4.7 L4.4 5.6 L5.7 6.2 L3.2 9.9 L3.0 7.9 Z" fill="#000"/>
+        </symbol>
+      </defs>
+    </svg>
+    <table>
+      <colgroup>
+        <col style="width:63.4pt"><col style="width:22.1pt"><col style="width:16.3pt"><col style="width:66.7pt">
+        <col style="width:21.6pt"><col style="width:71.5pt"><col style="width:24pt"><col style="width:30.2pt">
+      </colgroup>
+      <tr style="height:16.1pt">
+        <td class="l" id="pv-skill1-label" data-fit-w="55"></td>
+        <td class="cb"><svg class="chk" id="chk-skill1"><use href="#tick"/></svg></td>
+        <td></td>
+        <td class="l" style="padding-left:9pt">Cleaning</td>
+        <td class="cb"><svg class="chk" id="chk-cleaning"><use href="#tick"/></svg></td>
+        <td class="l" style="padding-left:9pt">Ironing</td>
+        <td class="cb"><svg class="chk" id="chk-ironing"><use href="#tick"/></svg></td>
+        <td></td>
+      </tr>
+      <tr style="height:23.1pt">
+        <td class="l" style="vertical-align:bottom; padding-bottom:3pt">Sewing</td>
+        <td class="cb" style="padding:0"><span class="box" style="margin-top:6pt; height:16.5pt; border:.75pt solid #000; border-top:.75pt solid #000; border-bottom:0; padding-top:1.5pt"><svg class="chk" id="chk-sewing"><use href="#tick"/></svg></span></td>
+        <td></td>
+        <td class="l" style="padding-left:9pt; vertical-align:bottom; padding-bottom:3pt">Cooking</td>
+        <td class="cb" style="padding:0"><span class="box" style="margin-top:6pt; height:16.5pt; border:.75pt solid #000; border-bottom:0; padding-top:1.5pt"><svg class="chk" id="chk-cooking"><use href="#tick"/></svg></span></td>
+        <td class="l" style="padding-left:9pt; vertical-align:bottom; padding-bottom:3pt">Baby care</td>
+        <td class="cb" style="padding:0"><span class="box" style="margin-top:6pt; height:16.5pt; border:.75pt solid #000; border-bottom:0; padding-top:1.5pt"><svg class="chk" id="chk-babycare"><use href="#tick"/></svg></span></td>
+        <td></td>
+      </tr>
+    </table>
+
+    <!-- Contact person -->
+    <table>
+      <colgroup><col style="width:85.4pt"><col style="width:230.4pt"></colgroup>
+      <tr style="height:19.4pt"><td colspan="2" style="font: bold 12pt/1 Calibri, Carlito, sans-serif; padding-left:5.5pt; vertical-align:middle">Contact Person:</td></tr>
+      <tr style="height:16.6pt"><td class="l lb">Name</td><td class="v" style="padding-left:2pt; vertical-align:middle; padding-top:3pt" id="pv-cpname" data-fit-w="215"></td></tr>
+      <tr style="height:17.2pt"><td class="l lb">Contact&nbsp;&nbsp;&nbsp; Number</td><td class="v" style="padding-left:2pt; vertical-align:middle; padding-top:4pt" id="pv-cpnumber" data-fit-w="215"></td></tr>
+      <tr style="height:16.6pt"><td class="l lb">Relationship</td><td class="v" style="padding-left:7pt; vertical-align:middle; padding-top:3pt" id="pv-cprel" data-fit-w="215"></td></tr>
+      <tr style="height:18pt"><td class="l lb">Address</td><td class="v" style="padding-left:7pt; vertical-align:middle; padding-top:2.8pt" id="pv-cpaddress" data-fit-w="215"></td></tr>
+    </table>
+
+    <!-- Languages red bar -->
+    <table>
+      <tr style="height:17.3pt">
+        <td class="red whitebold" style="font: bold 10pt/1 Arial,'Liberation Sans',sans-serif; letter-spacing:-1.05pt; word-spacing:-2.6pt; padding-left:3pt; vertical-align:middle;">
+          Language you can Speak/Write<span style="font: bold 10pt/1 Arial,'Noto Sans Arabic',sans-serif; letter-spacing:0; margin-left:3pt">إجــادة اللغـات</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ===== RIGHT COLUMN: full body photo box ===== -->
+  <div class="abs" style="left:356.6pt; top:181.3pt; width:230.5pt; height:359.7pt; border-left:.75pt solid #000; border-right:.75pt solid #000; border-bottom:.75pt solid #000;"></div>
+  <img class="abs" id="pv-fullbody" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Full body photo"
+       style="visibility:hidden; left:365.28pt; top:195.72pt; width:221.9pt; height:331.4pt;">
+  <div class="abs" style="left:356.6pt; top:541pt; width:230.5pt; height:6.3pt; border-left:.75pt solid #000; border-right:.75pt solid #000; border-bottom:.75pt solid #000;"></div>
+
+  <!-- ===== LANGUAGES + WEIGHT / HEIGHT / COMPLEXION ===== -->
+  <table class="abs" style="left:40.8pt; top:546.2pt; width:546.3pt;">
+    <colgroup>
+      <col style="width:72pt"><col style="width:83.5pt"><col style="width:84pt"><col style="width:76.3pt">
+      <col style="width:98.9pt"><col style="width:80.2pt"><col style="width:51.4pt">
+    </colgroup>
+    <tr style="height:18pt">
+      <td class="l">Language<span style="font:bold 6.5pt Arial,'Noto Sans Arabic',sans-serif">اللغة</span></td>
+      <td class="l" style="padding-left:20pt">Fluent<span style="font:bold 7pt Arial,'Noto Sans Arabic',sans-serif; margin-left:1pt">ممتاز</span></td>
+      <td class="l" style="padding-left:20pt">Fair<span style="font:bold 7pt Arial,'Noto Sans Arabic',sans-serif; margin-left:3pt">متوسط</span></td>
+      <td class="ar" style="text-align:left; direction:ltr; padding-left:15pt; font-size:3.4pt">Poor ضعيف</td>
+      <td class="l">Weight</td><td class="v" id="pv-weight" data-fit-w="70" style="padding-left:6pt; vertical-align:middle; font:bold 9.7pt/1 Calibri, Carlito, 'Segoe UI', sans-serif;"></td><td class="ar">الوزن</td>
+    </tr>
+    <tr style="height:17.3pt">
+      <td class="l" style="vertical-align:bottom; padding-bottom:2.5pt">English</td>
+      <td class="lang" id="pv-eng-fluent"></td>
+      <td class="lang" id="pv-eng-fair"></td><td class="lang" id="pv-eng-poor"></td>
+      <td class="l">Height</td><td class="v" id="pv-height" data-fit-w="70" style="padding-left:6pt; vertical-align:middle; font:bold 9.7pt/1 Calibri, Carlito, 'Segoe UI', sans-serif;"></td><td class="ar">الطول</td>
+    </tr>
+    <tr style="height:23pt">
+      <td class="l" style="vertical-align:bottom; padding-bottom:4pt">Arabic</td>
+      <td class="lang" id="pv-ara-fluent" style="padding-top:2pt"></td>
+      <td class="lang" id="pv-ara-fair" style="padding-top:2pt"></td><td class="lang" id="pv-ara-poor" style="padding-top:2pt"></td>
+      <td class="l" style="vertical-align:bottom; padding-bottom:4pt">Complexion</td><td class="v" id="pv-complexion" data-fit-w="70" style="padding-left:6pt; vertical-align:middle; font:bold 9.7pt/1 Calibri, Carlito, 'Segoe UI', sans-serif;"></td><td class="ar">اللون</td>
+    </tr>
+  </table>
+
+  <!-- ===== REMARKS ===== -->
+  <div class="abs remarks" style="left:40.8pt; top:604.5pt; width:546.3pt; height:121.3pt; border:.75pt solid #000; padding-top:20.7pt;">
+    <div style="padding-left:5pt; margin-bottom:1.4pt;"><span class="hl">REMARKS:</span></div>
+    <ul id="pv-remarks"></ul>
+  </div>
+</section>
+
+<!-- ===================================================== PAGE 2 : PASSPORT ===================================================== -->
+<section class="page p2">
+  <img class="abs scan" id="pv-passportscan" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Passport"
+       style="visibility:hidden; left:51.36pt; top:34.56pt; width:509.3pt; height:717.6pt;">
+</section>
+
+
+  </div>
+</div>
+
+<script src="../shared/cv-core.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
